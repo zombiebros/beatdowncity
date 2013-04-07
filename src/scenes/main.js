@@ -5,11 +5,6 @@ Crafty.scene("main",(function() {
 	Crafty.viewport.horizonx = Crafty.viewport.height / 4;
 
 	var scene = {
-		level: 1,
-		enemyspawnrate: 200,
-		chancetospawntank: 2,
-		maxenemies: 5,
-
 		gameoverHandler: function(){
 			Crafty.pause();
 			Crafty.audio.stop();
