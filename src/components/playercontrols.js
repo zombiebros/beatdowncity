@@ -6,16 +6,23 @@ Crafty.c("PlayerControls", {
     .bind("NewDirection", this.changeDirection);
 
     this.animate('Walking',2,0,0);
+    this.animate("Standing", 0,0,0);
     this.bind("Moved", this.movingAnimation);
   },
 
   changeDirection: function(direction){
-    console.log("changing direction");
-    this.flip("X");
+    if(direction.x > 0){
+        this.unflip("X");
+    }else if(direction.x < 0){
+        this.flip("X");
+    }
+
+    if(!direction.x){
+      this.stop().animate("Standing",25,0);
+    } 
   },
 
   movingAnimation: function(movedata){
-    console.log("moving");
     this.animate('Walking',25,-1);
   }
 
