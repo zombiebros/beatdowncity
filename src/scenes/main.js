@@ -23,6 +23,8 @@ Crafty.scene("main",(function() {
 
 			var player = Crafty.e("Player, Collision")
 			.attr({
+                w:140,
+                h:138,
 				x:Crafty.viewport.width/2-50,
 				y: Crafty.viewport.height - 200,
 				z: 2
