@@ -17,6 +17,7 @@ Crafty.scene("main",(function() {
 
 		init: function(){
             mixpanel.track("New Game");
+            Crafty.background("#FFFFFF");
 			if(Crafty.isPaused()){Crafty.pause();}
 
 			Crafty.bind("EnterFrame", $.proxy(this.enterFrameHandler, this));
