@@ -2,7 +2,7 @@ Crafty.sprite(32,"url", {
 });
 
 
-Crafty.sprite(40,38, "resources/images/RCR.png", {
+Crafty.sprite(40,40, "resources/images/RCR.png", {
 	player1: [1,0]
 });
 

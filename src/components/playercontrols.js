@@ -1,12 +1,15 @@
 Crafty.c("PlayerControls", {
 
   init: function() {
-    this.requires("Fourway, ViewportConstrain, SpriteAnimation")
+    this.requires("Fourway, ViewportConstrain, SpriteAnimation, Keyboard")
     .fourway(4)
-    .bind("NewDirection", this.changeDirection);
+    .bind("NewDirection", this.changeDirection)
+    .bind("KeyDown", this.keyHandler);
 
     this.animate('Walking',2,0,0);
     this.animate("Standing", 0,0,0);
+    this.animate("Punch", 0,1,2);
+    this.animate("Kick", 0,2,2);
     this.bind("Moved", this.movingAnimation);
   },
 
@@ -24,6 +27,16 @@ Crafty.c("PlayerControls", {
 
   movingAnimation: function(movedata){
     this.animate('Walking',25,-1);
+  },
+
+  keyHandler: function(){
+    if(this.isDown(88)){
+        this.animate('Punch',10,0);
+    }
+
+    if(this.isDown(67)){
+        this.animate('Kick',10,0);
+    }
   }
 
 });
