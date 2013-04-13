@@ -18,6 +18,15 @@
 			"permissions": ["http://*/*", "https://*/*"]
 		},
 		"tools": true,
-		"reload": true
+		"reload": true,
+        "display": {
+          "orientations":{
+            "default": "landscape"
+            },
+            "fullscreen":{
+              "default": true,
+              "ios": true
+          }
+      }
 	}
 }
