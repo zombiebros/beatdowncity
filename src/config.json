@@ -21,7 +21,10 @@
 		"reload": true,
         "display": {
           "orientations":{
-            "default": "landscape"
+            "default": "landscape",
+            "ipad": "landscape",
+            "android": "landscape",
+            "iphone": "landscape"
             },
             "fullscreen":{
               "default": true,
