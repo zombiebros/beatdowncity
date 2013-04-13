@@ -1,4 +1,7 @@
 Crafty.c("PlayerControls", {
+  isPuncthing: false,
+  isKicking: false,
+  isRunning: false,
 
   init: function() {
     this.requires("Fourway, ViewportConstrain, SpriteAnimation, Keyboard")
