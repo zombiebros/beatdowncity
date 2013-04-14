@@ -13,6 +13,7 @@ Crafty.c("PlayerControls", {
     this.animate("Standing", 0,0,0);
     this.animate("Punch", 0,1,2);
     this.animate("Kick", 0,2,2);
+    this.animate('Jump',5,0,6);
     this.bind("Moved", this.movingAnimation);
   },
 
@@ -25,7 +26,7 @@ Crafty.c("PlayerControls", {
 
     if(!direction.x){
       this.stop().animate("Standing",25,0);
-    } 
+    }
   },
 
   movingAnimation: function(movedata){
@@ -39,6 +40,10 @@ Crafty.c("PlayerControls", {
 
     if(this.isDown(67)){
         this.animate('Kick',10,0);
+    }
+
+    if(this.isDown(32)){
+        this.animate('Jump',10,0);
     }
   }
 
