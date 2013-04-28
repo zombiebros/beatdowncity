@@ -15,6 +15,7 @@ Crafty.c("PlayerControls", {
     this.animate("Kick", 0,2,2);
     this.animate('Jump',5,0,6);
     this.bind("Moved", this.movingAnimation);
+    this.bind('EnterFrame', this.enterFrameHandler);
   },
 
   changeDirection: function(direction){
@@ -29,11 +30,28 @@ Crafty.c("PlayerControls", {
     }
   },
 
+  enterFrameHandler: function(){
+    if(this.isPlaying('Punch') ||
+       this.isPlaying('Kick') ||
+       this.isPlaying('Jump') ||
+       this.isPlaying('Walking')){
+      return false;
+    }else{
+      this.stop().animate("Standing",25,0);
+    }
+  },
+
   movingAnimation: function(movedata){
     this.animate('Walking',25,-1);
   },
 
   keyHandler: function(){
+    if(this.isPlaying('Punch') ||
+       this.isPlaying('Kick') ||
+       this.isPlaying('Jump')){
+      return false;
+    }
+
     if(this.isDown(88)){
         this.animate('Punch',10,0);
     }
