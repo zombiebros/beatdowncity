@@ -42,7 +42,7 @@ Crafty.c("PlayerControls", {
   },
 
   movingAnimation: function(movedata){
-    this.animate('Walking',25,-1);
+    this.animate('Walking',15,-1);
   },
 
   keyHandler: function(){
@@ -53,11 +53,11 @@ Crafty.c("PlayerControls", {
     }
 
     if(this.isDown(88)){
-        this.animate('Punch',10,0);
+        this.animate('Punch',15,0);
     }
 
     if(this.isDown(67)){
-        this.animate('Kick',10,0);
+        this.animate('Kick',15,0);
     }
 
     if(this.isDown(32)){
