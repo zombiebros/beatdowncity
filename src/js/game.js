@@ -3,10 +3,13 @@ var Firebase = new Firebase('https://beatdowncity.firebaseIO.com/');
 var authClient = new FirebaseAuthClient(Firebase, authClientHandler);
 
 function authClientHandler(error, user){
+  console.log("authClientHandler", error, user);
   if (error) {
     authClientError(error, user);
   } else if (user) {
-    authClientSuccess();
+    console.log("auth client success?", user);
+    Crafty.player_id = user.id;
+    authClientSuccess(user);
   } else {
     authClientLogout();
   }
@@ -26,6 +29,7 @@ function startGame(){
   stats.domElement.style.zIndex = 9000;
   document.body.appendChild( stats.domElement );
   Crafty.init().canvas.init();
+  Crafty.background("#FFFFFF");
   Crafty.bind("EnterFrame", function(){
     stats.begin();
     stats.end();
@@ -46,18 +50,13 @@ function authClientLogout(){
 function authClientCreateUserHandler(error, user){
   console.log("auth client create user handler", error, user);
   if(!error){
-    console.log("user created successfully");
+    console.log("user created successfully", user);
+    Crafty.player_id = user.id;
     startGame();
   }else{
     console.log("error creating user", error);
   }
 }
-
-var global_state = {
-  current_level: 0,
-  loaded_maps: [],
-  users: Firebase.child('users')
-};
 
 function signupSubmit(event){
   console.log('signup');

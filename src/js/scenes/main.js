@@ -20,8 +20,8 @@ Crafty.scene("main",(function() {
 
     renderOtherUsers: function(otherUsers){
       for(var user_id in otherUsers.val()){
-        if(user_id != global_state.guid){
-          var remoteUser = global_state.users.child(user_id);
+        if(user_id != Crafty.player_id){
+          var remoteUser = Firebase.child('users').child(user_id);
           var player = Crafty.e("Player, Collision")
           .attr({
             w:140,
@@ -39,11 +39,8 @@ Crafty.scene("main",(function() {
 
 		init: function(){
       mixpanel.track("New Game");
-      Crafty.background("#FFFFFF");
 
-      global_state.guid = generate_guid();
-      var remote = global_state.users.child(global_state.guid);
-
+      var remote = Firebase.child('users').child(Crafty.player_id);
 			var player = Crafty.e("Player, PlayerControls, Collision")
 			.attr({
         w:140,
@@ -60,7 +57,8 @@ Crafty.scene("main",(function() {
         });
       });
 
-      global_state.users.once("value", this.renderOtherUsers);
+      Firebase.child('users').once("value", this.renderOtherUsers);
+      //Firebase.child('users').on("");
 		}
 	};
 
