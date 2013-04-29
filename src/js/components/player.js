@@ -2,7 +2,7 @@ Crafty.c("Player", {
     life: 100,
 	
 	init: function(){
-     this.requires("2D, Canvas, player1, PlayerControls, SpriteAnimation");
+     this.requires("2D, Canvas, player1, SpriteAnimation");
 
      // this.bind("Damage",function(damage){
      //    if(damage > 0){
