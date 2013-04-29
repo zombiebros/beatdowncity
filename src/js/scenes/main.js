@@ -60,7 +60,7 @@ Crafty.scene("main",(function() {
         });
       });
 
-      global_state.users.on("value", this.renderOtherUsers);
+      global_state.users.once("value", this.renderOtherUsers);
 		}
 	};
 
