@@ -9,70 +9,48 @@ Crafty.c("PlayerControls", {
 
   init: function() {
     this.requires("Fourway, ViewportConstrain, Keyboard")
-    .fourway(4)
-    .bind("NewDirection", $.proxy(this.changeDirection, this))
+    //.fourway(4)
+    //.bind("NewDirection", $.proxy(this.changeDirection, this))
     .bind("KeyDown", $.proxy(this.keyHandler, this));
-
-    //this.bind("Move", $.proxy(this.movingAnimation, this));
-    this.bind("Change", function(){ console.log("changed", this);});
-    this.bind('EnterFrame', $.proxy(this.enterFrameHandler, this));
   },
 
-  changeDirection: function(direction){
-    if(direction.x > 0){
-        this.unflip("X");
-    }else if(direction.x < 0){
-        this.flip("X");
-    }
+  // changeDirection: function(direction){
+  //   if(direction.x > 0){
+  //       this.unflip("X");
+  //   }else if(direction.x < 0){
+  //       this.flip("X");
+  //   }
 
-    if(!direction.x){
-      this.stop().animate("Standing",25,0);
-    }
-  },
-
-  enterFrameHandler: function(){
-    if(this.isPlaying('Punch') ||
-       this.isPlaying('Kick') ||
-       this.isPlaying('Jump') ||
-       this.isPlaying('Walking') ||
-       this.isPlaying('Land')){
-      return false;
-    }
-
-    if(this.isJumping){
-        if(this.y - this.jumpSpeed <= (this.preJumpY - this.jumpHeight)){
-          this.isJumping = false;
-          this.isLanding = true;
-          return;
-        }
-        return this.y-= this.jumpSpeed;
-    }
-
-    if(this.isLanding){
-      if(this.y + this.jumpSpeed >= this.preJumpY){
-        this.animate('Land', 2, 0);
-        this.isLanding = false;
-        this.y = this.preJumpY;
-        this.preJumpY = null;
-        return;
-      }else{
-        return this.y+= this.jumpSpeed;
-      }
-    }
-
-    this.stop().animate("Standing",25,0);
-  },
-
-  movingAnimation: function(movedata){
-    console.log("animating walking for", this);
-    this.animate('Walking',15,-1);
-  },
+  //   if(!direction.x){
+  //     this.stop().animate("Standing",25,0);
+  //   }
+  // },
 
   keyHandler: function(){
     if(this.isPlaying('Punch') ||
        this.isPlaying('Kick') ||
        this.isPlaying('Jump')){
       return false;
+    }
+
+    //Left
+    if(this.isDown(37)){
+      this.x-=4;
+    }
+
+    //Right
+    if(this.isDown(39)){
+      this.x+=4;
+    }
+
+    //Up
+    if(this.isDown(38)){
+      this.y-=4;
+    }
+
+    //Down
+    if(this.isDown(40)){
+      this.y+=4;
     }
 
     if(this.isDown(88)){

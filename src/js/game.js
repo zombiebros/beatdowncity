@@ -3,11 +3,9 @@ var Firebase = new Firebase('https://beatdowncity.firebaseIO.com/');
 var authClient = new FirebaseAuthClient(Firebase, authClientHandler);
 
 function authClientHandler(error, user){
-  console.log("authClientHandler", error, user);
   if (error) {
     authClientError(error, user);
   } else if (user) {
-    console.log("auth client success?", user);
     Crafty.player_id = user.id;
     authClientSuccess(user);
   } else {
@@ -17,7 +15,7 @@ function authClientHandler(error, user){
 
 function authClientError(error, user){
   // an error occurred while attempting login
-  console.log("login error", error);
+  alert(" an error occured while logging in");
 }
 
 function startGame(){
@@ -39,7 +37,6 @@ function startGame(){
 
 function authClientSuccess(user){
     // user authenticated with Firebase
-    console.log("user authenticated success", user);
     startGame();
 }
 
@@ -48,18 +45,15 @@ function authClientLogout(){
 }
 
 function authClientCreateUserHandler(error, user){
-  console.log("auth client create user handler", error, user);
   if(!error){
-    console.log("user created successfully", user);
     Crafty.player_id = user.id;
     startGame();
   }else{
-    console.log("error creating user", error);
+    alert("Error creating usere");
   }
 }
 
 function signupSubmit(event){
-  console.log('signup');
   event.preventDefault();
   var $form = $(event.target),
       $email = $form.find('#email'),
