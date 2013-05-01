@@ -8,18 +8,13 @@ Crafty.c("PlayerControls", {
   preJumpY: null,
 
   init: function() {
-    this.requires("Fourway, ViewportConstrain, SpriteAnimation, Keyboard")
+    this.requires("Fourway, ViewportConstrain, Keyboard")
     .fourway(4)
     .bind("NewDirection", $.proxy(this.changeDirection, this))
     .bind("KeyDown", $.proxy(this.keyHandler, this));
 
-    this.animate('Walking',2,0,0);
-    this.animate("Standing", 0,0,0);
-    this.animate("Punch", 0,1,2);
-    this.animate("Kick", 0,2,2);
-    this.animate('Jump',5,0,5);
-    this.animate('Land',6,0,6);
-    this.bind("Moved", this.movingAnimation);
+    //this.bind("Move", $.proxy(this.movingAnimation, this));
+    this.bind("Change", function(){ console.log("changed", this);});
     this.bind('EnterFrame', $.proxy(this.enterFrameHandler, this));
   },
 
@@ -69,6 +64,7 @@ Crafty.c("PlayerControls", {
   },
 
   movingAnimation: function(movedata){
+    console.log("animating walking for", this);
     this.animate('Walking',15,-1);
   },
 

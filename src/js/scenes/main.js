@@ -19,24 +19,15 @@ Crafty.scene("main",(function() {
 	var scene = {
 
     renderOtherUsers: function(otherUsers){
-      console.log("rendering other users");
       for(var user_id in otherUsers.val()){
         if(user_id != Crafty.player_id){
-          console.log("calling render user in loop for ", user_id, otherUsers.child(user_id));
           this.renderUserSnapshot(otherUsers.child(user_id));
         }
       }
     },
 
-    // renderUserSnapshot: function(snapshot){
-    //   console.log("rendering user snapshot", snapshot, Crafty.player_id);
-    //   if(snapshot.name() != Crafty.player_id){
-    //     this.renderUser(snapshot.val());
-    //   }
-    // },
 
     renderUserSnapshot: function(snapshot){
-          console.log("in renderUser", snapshot);
           var remoteUser = Firebase.child('users').child(snapshot.name());
           var player = Crafty.e("Player, Collision")
           .attr({
@@ -64,21 +55,6 @@ Crafty.scene("main",(function() {
 
 		init: function(){
       var remote = Firebase.child('users').child(Crafty.player_id);
-			// var player = Crafty.e("Player, PlayerControls, Collision")
-			// .attr({
-   //      w:140,
-   //      h:138,
-			// 	x:Crafty.viewport.width/2-50,
-			// 	y: Crafty.viewport.height - 200,
-			// 	z: 2
-			// })
-			// .collision([60,200], [140,200], [110,0], [80,0])
-   //    .bind('EnterFrame', function(){
-   //      remote.set({
-   //        x: this.x,
-   //        y: this.y
-   //      });
-   //    });
 
       Firebase.child('users').once("value", $.proxy(this.renderOtherUsers, this));
       Firebase.child('users').on("child_added", $.proxy(this.renderUserSnapshot, this));
