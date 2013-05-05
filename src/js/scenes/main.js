@@ -1,17 +1,3 @@
-/* temporary helpers */
-
-function s4() {
-  return Math.floor((1 + Math.random()) * 0x10000)
-             .toString(16)
-             .substring(1);
-}
-
-function generate_guid() {
-  return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
-         s4() + '-' + s4() + s4() + s4();
-}
-
-
 Crafty.scene("main",(function() {
 	//Crafty.scene only takes a function parameter. I've wrapped an object for our scene in a closure.
 	//This gives us more state to work with. Returns an init function at the bottom.
@@ -29,7 +15,6 @@ Crafty.scene("main",(function() {
     },
 
     renderLocalPlayer: function(snapshot){
-      console.log("we got local snapshot", snapshot);
       this.renderUserSnapshot(snapshot);
       Firebase.child('users').once("value", $.proxy(this.renderOtherUsers, this));
     },
@@ -37,7 +22,7 @@ Crafty.scene("main",(function() {
 
     renderUserSnapshot: function(snapshot){
       var remoteUser = Firebase.child('users').child(snapshot.name());
-      if(Crafty('user_'+snapshot.name()).length === 0){
+      if(Crafty('user_'+snapshot.name()).length === 0){ //only render the player once
         var player = Crafty.e("Player, Collision")
         .attr({
           w:140,
@@ -46,19 +31,41 @@ Crafty.scene("main",(function() {
         })
         .collision([60,200], [140,200], [110,0], [80,0])
         .addComponent('user_'+snapshot.name());
+        player.remote = remoteUser;
 
-        /* if its the local player */
+        //if its the local player publish events to remote
         if(snapshot.name() == Crafty.player_id){
           player.addComponent('PlayerControls');
+
+          // update remote animation states on every frame
           player.bind('EnterFrame', function(){
             remoteUser.set({
               x: this.x,
-              y: this.y
+              y: this.y,
+              isPunching: this.isPunching,
+              isKicking: this.isKicking,
+              isJumping: this.isJumping,
+              preJumpy: false
             });
           });
-        }else{
+
+        }else{// its a remote user just listen and update locally
           remoteUser.on('value', function(snapshot){
-            player.attr(snapshot.val());
+            var state = snapshot.val();
+            // only update x and y if they changed remotely
+            // otherwise we will constantly trigger the users 'moved' handler
+            if(state.x != player.x){
+              player.x = state.x;
+            }
+
+            if(state.y != player.y){
+              player.y = state.y;
+            }
+            var state = snapshot.val();
+            player.isPunching = state.isPunching;
+            player.isKicking = state.isKicking;
+            player.isJumping = state.isJumping;
+            player.preJumpy = state.preJumpy;
           });
         }
       }

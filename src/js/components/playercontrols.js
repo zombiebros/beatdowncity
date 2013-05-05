@@ -1,30 +1,9 @@
 Crafty.c("PlayerControls", {
-  isPuncthing: false,
-  isKicking: false,
-  isRunning: false,
-  isJumping: false,
-  jumpHeight: 150,
-  jumpSpeed: 10,
-  preJumpY: null,
-
   init: function() {
-    this.requires("Fourway, ViewportConstrain, Keyboard")
-    //.fourway(4)
-    //.bind("NewDirection", $.proxy(this.changeDirection, this))
+    this.requires("Fourway, Keyboard")
+    .fourway(4)
     .bind("KeyDown", $.proxy(this.keyHandler, this));
   },
-
-  // changeDirection: function(direction){
-  //   if(direction.x > 0){
-  //       this.unflip("X");
-  //   }else if(direction.x < 0){
-  //       this.flip("X");
-  //   }
-
-  //   if(!direction.x){
-  //     this.stop().animate("Standing",25,0);
-  //   }
-  // },
 
   keyHandler: function(){
     if(this.isPlaying('Punch') ||
@@ -54,11 +33,11 @@ Crafty.c("PlayerControls", {
     }
 
     if(this.isDown(88)){
-        this.animate('Punch',15,0);
+        this.isPunching = true;
     }
 
     if(this.isDown(67)){
-        this.animate('Kick',15,0);
+        this.isKicking = true;
     }
 
     if(this.isDown(32)){
@@ -75,7 +54,6 @@ Crafty.c("PlayerControls", {
     if(!this.preJumpY){
       this.preJumpY = this.y;
     }
-    this.animate('Jump',1,0);
   }
 
 });
