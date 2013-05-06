@@ -48,13 +48,24 @@ Crafty.c("Player", {
     }
 
     if(this.isJumping){
-        this.stop().animate('Jump',1,0);
+        this.animate('Jump',1,-1);
         if(this.y - this.jumpSpeed <= (this.preJumpY - this.jumpHeight)){
           this.isJumping = false;
           this.isLanding = true;
-          return;
         }
         return this.y-= this.jumpSpeed;
+    }
+
+    if(this.isLanding){
+      if(this.y + this.jumpSpeed >= this.preJumpY){
+        this.animate('Land', 2, -1);
+        this.isLanding = false;
+        this.y = this.preJumpY;
+        this.preJumpY = false;
+        return;
+      }else{
+        return this.y+= this.jumpSpeed;
+      }
     }
 
     if(this.isPunching && !this.isPlaying('Punch')){
@@ -69,18 +80,6 @@ Crafty.c("Player", {
         this.isKicking = false;        
       });
       return;
-    }
-
-    if(this.isLanding){
-      if(this.y + this.jumpSpeed >= this.preJumpY){
-        this.animate('Land', 2, 0);
-        this.isLanding = false;
-        this.y = this.preJumpY;
-        this.preJumpY = null;
-        return;
-      }else{
-        return this.y+= this.jumpSpeed;
-      }
     }
 
     if(this.isPlaying('Walking')){
