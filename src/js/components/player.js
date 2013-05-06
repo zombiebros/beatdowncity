@@ -65,7 +65,7 @@ Crafty.c("Player", {
     }
 
     if(this.isKicking){
-      this..stop().animate('Kick',15,0).bind('AnimationEnd', function(reel){
+      this.stop().animate('Kick',15,0).bind('AnimationEnd', function(reel){
         this.isKicking = false;        
       });
       return;

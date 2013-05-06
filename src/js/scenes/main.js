@@ -23,13 +23,16 @@ Crafty.scene("main",(function() {
     renderUserSnapshot: function(snapshot){
       var remoteUser = Firebase.child('users').child(snapshot.name());
       if(Crafty('user_'+snapshot.name()).length === 0){ //only render the player once
-        var player = Crafty.e("Player, Collision, WiredhitBox")
+        var player = Crafty.e("Player")
         .attr({
+          x:0,
+          y:0,
           w:140,
           h:138,
           z: 2
         })
-        .collision([60,200], [140,200], [110,0], [80,0])
+        .addComponent('Collision, WiredHitBox')
+        .collision([0,100], [100,100], [100,0], [80,0])
         .addComponent('user_'+snapshot.name());
         player.remote = remoteUser;
 
