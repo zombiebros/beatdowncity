@@ -23,7 +23,7 @@ Crafty.scene("main",(function() {
     renderUserSnapshot: function(snapshot){
       var remoteUser = Firebase.child('users').child(snapshot.name());
       if(Crafty('user_'+snapshot.name()).length === 0){ //only render the player once
-        var player = Crafty.e("Player, Collision")
+        var player = Crafty.e("Player, Collision, WiredhitBox")
         .attr({
           w:140,
           h:138,
@@ -54,6 +54,7 @@ Crafty.scene("main",(function() {
             var state = snapshot.val();
             // only update x and y if they changed remotely
             // otherwise we will constantly trigger the users 'moved' handler
+            // causing unexpected behavior
             if(state.x != player.x){
               player.x = state.x;
             }
@@ -61,6 +62,7 @@ Crafty.scene("main",(function() {
             if(state.y != player.y){
               player.y = state.y;
             }
+
             var state = snapshot.val();
             player.isPunching = state.isPunching;
             player.isKicking = state.isKicking;

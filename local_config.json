@@ -2,26 +2,19 @@
     "web": {
         "profiles": {
             "DEFAULT": {
-                "heroku_app_name": "murmuring-escarpment-7906", 
+                "heroku_app_name": "beatdowncity", 
                 "heroku_api_key": "b21d60b5dd01034a0ac2cab399c45aa7"
             }
         }
     }, 
-    "android": {
-        "profiles": {
-            "DEFAULT": {
-                "keystore": "", 
-                "keyalias": ""
-            }
-        }, 
-        "sdk": ""
-    }, 
     "ios": {
-        "profiles": {
-            "DEFAULT": {
-                "provisioning_profile": ""
-            }
-        }
+        "device": "simulator", 
+        "simulatorsdk": "6.0", 
+        "simulatorfamily": "iphone"
     }, 
-    "general": {}
+    "general": {
+        "reload": {
+            "external": false
+        }
+    }
 }

@@ -9,7 +9,7 @@ Crafty.c("Player", {
   preJumpY: null,
 
   init: function(){
-   this.requires("2D, Canvas, player1, SpriteAnimation, remoteATTR");
+   this.requires("2D, Canvas, player1, SpriteAnimation");
    this.animate('Walking',2,0,0);
    this.animate("Standing", 0,0,0);
    this.animate("Punch", 0,1,2);
@@ -43,13 +43,12 @@ Crafty.c("Player", {
     if(this.isPlaying('Punch') ||
        this.isPlaying('Kick') ||
        this.isPlaying('Jump') ||
-       this.isPlaying('Walking') ||
        this.isPlaying('Land')){
       return false;
     }
 
     if(this.isJumping){
-        this.animate('Jump',1,0);
+        this.stop().animate('Jump',1,0);
         if(this.y - this.jumpSpeed <= (this.preJumpY - this.jumpHeight)){
           this.isJumping = false;
           this.isLanding = true;
@@ -59,14 +58,14 @@ Crafty.c("Player", {
     }
 
     if(this.isPunching && !this.isPlaying('Punch')){
-      this.animate('Punch',15,0).bind("AnimationEnd", function(reel){
+      this.stop().animate('Punch',15,0).bind("AnimationEnd", function(reel){
         this.isPunching = false;
       });
       return;
     }
 
     if(this.isKicking){
-      this.animate('Kick',15,0).bind('AnimationEnd', function(reel){
+      this..stop().animate('Kick',15,0).bind('AnimationEnd', function(reel){
         this.isKicking = false;        
       });
       return;
@@ -82,6 +81,10 @@ Crafty.c("Player", {
       }else{
         return this.y+= this.jumpSpeed;
       }
+    }
+
+    if(this.isPlaying('Walking')){
+      return;
     }
 
     this.stop().animate("Standing",25,0);
