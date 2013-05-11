@@ -2,6 +2,15 @@
 var Firebase = new Firebase('https://beatdowncity.firebaseIO.com/');
 var authClient = new FirebaseAuthClient(Firebase, authClientHandler);
 
+console.log("forge.display", forge.display);
+
+var boundsWidth = 1024;
+var boundsHeight = 576;
+var baseWidth = window.innerWidth * (boundsHeight / window.innerHeight); //864
+var baseHeight = boundsHeight; //576
+var scale = window.innerHeight / baseHeight; //1
+
+
 function authClientHandler(error, user){
   if (error) {
     authClientError(error, user);
@@ -26,7 +35,8 @@ function startGame(){
   stats.domElement.style.top = '0px';
   stats.domElement.style.zIndex = 9000;
   document.body.appendChild( stats.domElement );
-  Crafty.init().canvas.init();
+  Crafty.init(boundsWidth, boundsHeight).canvas.init();
+  Crafty.viewport.scale(scale);
   Crafty.background("#FFFFFF");
   Crafty.bind("EnterFrame", function(){
     stats.begin();

@@ -1,17 +1,17 @@
 Crafty.c("PlayerControls", {
   init: function() {
-    this.requires("Fourway, Keyboard")
-    .fourway(4)
+    this.requires("Keyboard")
+    .bind("EnterFrame", $.proxy(this.enterFrameHandler, this))
     .bind("KeyDown", $.proxy(this.keyHandler, this));
   },
 
-  keyHandler: function(){
+  enterFrameHandler:function(){
     if(this.isPlaying('Punch') ||
-       this.isPlaying('Kick') ||
-       this.isPlaying('Jump')){
-      return false;
+     this.isPlaying('Kick') ||
+     this.isPlaying('Jump') ||
+     this.isPlaying('Land')){
+     return false;
     }
-
     //Left
     if(this.isDown(37)){
       this.x-=4;
@@ -30,6 +30,14 @@ Crafty.c("PlayerControls", {
     //Down
     if(this.isDown(40)){
       this.y+=4;
+    }
+  },
+
+  keyHandler: function(){
+    if(this.isPlaying('Punch') ||
+       this.isPlaying('Kick') ||
+       this.isPlaying('Jump')){
+      return false;
     }
 
     if(this.isDown(88)){
