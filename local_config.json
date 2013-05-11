@@ -9,7 +9,7 @@
     }, 
     "ios": {
         "device": "simulator", 
-        "simulatorsdk": "6.0", 
+        "simulatorsdk": "6.1", 
         "simulatorfamily": "iphone"
     }, 
     "general": {

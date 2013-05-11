@@ -1,35 +1,37 @@
 {
-	"config_version": "2",
 	"name": "beatdowncity",
+	"description": "An empty app created by default",
 	"author": "kevzettler@gmail.com",
 	"version": "0.1",
-	"platform_version": "v1.4",
-	"description": "An empty app created by default",
+	"platform_version": "v1.4.44",
 	"modules": {
+		"contact": true,
+		"display": {
+			"fullscreen": {
+				"ios": true
+			},
+			"orientations": {
+				"android": "landscape",
+				"ipad": "landscape",
+				"iphone": "landscape"
+			}
+		},
+		"file": true,
+		"is": true,
 		"logging": {
 			"level": "DEBUG"
 		},
-		"contact": true,
-		"file": true,
-		"is": true,
-		"media": true,
+		"media": {},
 		"prefs": true,
-		"request": {
-			"permissions": ["http://*/*", "https://*/*"]
-		},
-		"tools": true,
 		"reload": true,
-        "display": {
-          "orientations":{
-            "default": "landscape",
-            "ipad": "landscape",
-            "android": "landscape",
-            "iphone": "landscape"
-            },
-            "fullscreen":{
-              "default": true,
-              "ios": true
-          }
-      }
-	}
+		"request": {
+			"permissions": [
+				"http://*/*",
+				"https://*/*"
+			]
+		},
+		"tools": true
+	},
+	"plugins": {},
+	"config_version": "2"
 }
