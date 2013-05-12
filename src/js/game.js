@@ -1,8 +1,22 @@
+if(typeof forge !== 'undefined'){
+  forge.logging.info("app starting !");
+
+  window.onerror = function(message, url, linenumber){
+    forge.logging.debug("JavaScript error: " + message + " on line " + linenumber + " for " + url+":"+linenumber);
+  };
+
+  console.log = function(){
+    var  args_array = Array.prototype.slice.call(arguments);
+    forge.logging.debug("Console.log: " + args_array.toString());
+  };
+}
+
+
 // Initialize Crafty
 var Firebase = new Firebase('https://beatdowncity.firebaseIO.com/');
 var authClient = new FirebaseAuthClient(Firebase, authClientHandler);
 
-console.log("forge.display", forge.display);
+
 
 var boundsWidth = 1024;
 var boundsHeight = 576;
@@ -10,6 +24,15 @@ var baseWidth = window.innerWidth * (boundsHeight / window.innerHeight); //864
 var baseHeight = boundsHeight; //576
 var scale = window.innerHeight / baseHeight; //1
 
+console.log("whats the window sizes",
+  window.innerHeight, window.innerWidth,
+  window.clientHeight, window.clientWidth);
+
+console.log("whats the generated sizes",
+  boundsWidth, boundsHeight,
+  baseWidth, baseHeight);
+
+console.log("view scale", scale);
 
 function authClientHandler(error, user){
   if (error) {
@@ -27,6 +50,20 @@ function authClientError(error, user){
   alert(" an error occured while logging in");
 }
 
+function setScale(){
+  console.log("setting scale");
+  scale = window.innerWidth / Crafty.stage.elem.clientWidth;
+    //make sure it's not bigger than the height
+    if (scale * Crafty.stage.elem.clientHeight > window.innerHeight) {
+      scale = window.innerHeight / Crafty.stage.elem.clientHeight;
+    }
+    console.log("scale ==", scale);
+
+    var stageStyle = Crafty.stage.elem.style;
+    stageStyle.transformOrigin = stageStyle.webkitTransformOrigin = stageStyle.mozTransformOrigin = "0 0";
+    stageStyle.transform = stageStyle.webkitTransform = stageStyle.mozTransform = "scale("+scale+")";
+}
+
 function startGame(){
   $('#landing').remove();
   var stats = new Stats();
@@ -35,13 +72,15 @@ function startGame(){
   stats.domElement.style.top = '0px';
   stats.domElement.style.zIndex = 9000;
   document.body.appendChild( stats.domElement );
-  Crafty.init(boundsWidth, boundsHeight).canvas.init();
-  Crafty.viewport.scale(scale);
+  Crafty.init(1024, 576).canvas.init();
+  var scale = window.innerWidth / Crafty.stage.width;
   Crafty.background("#FFFFFF");
   Crafty.bind("EnterFrame", function(){
     stats.begin();
     stats.end();
   });
+  Crafty.addEvent(this, window, "resize", setScale);
+  setScale();
   Crafty.scene("main");
 }
 

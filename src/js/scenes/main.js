@@ -27,12 +27,12 @@ Crafty.scene("main",(function() {
         .attr({
           x:0,
           y:0,
-          w:140,
-          h:138,
+          // w:140,
+          // h:138,
           z: 2
         })
         .addComponent('Collision, WiredHitBox')
-        .collision([50,30], [50,140], [100,140], [100,30])
+        //.collision([50,30], [50,140], [100,140], [100,30])
         .addComponent('user_'+snapshot.name());
         player.remote = remoteUser;
 
