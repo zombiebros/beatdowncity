@@ -32,9 +32,9 @@ Crafty.scene("main",(function() {
           z: 2
         })
         .addComponent('Collision, WiredHitBox')
-        //.collision([50,30], [50,140], [100,140], [100,30])
         .addComponent('user_'+snapshot.name());
         player.remote = remoteUser;
+        //player.collision([50,30], [50,140], [100,140], [100,30]);
 
         //if its the local player publish events to remote
         if(snapshot.name() == Crafty.player_id){
@@ -59,11 +59,11 @@ Crafty.scene("main",(function() {
             // otherwise we will constantly trigger the users 'moved' handler
             // causing unexpected behavior
             if(state.x != player.x){
-              player.x = state.x;
+              player.x = state.x / Crafty.scale;
             }
 
             if(state.y != player.y){
-              player.y = state.y;
+              player.y = state.y / Crafty.scale;
             }
 
             var state = snapshot.val();
@@ -77,6 +77,7 @@ Crafty.scene("main",(function() {
     },
 
 		init: function(){
+      Crafty.background('resources/images/RiverCityRansomEX-RiverCity.png');
       var remote = Firebase.child('users').child(Crafty.player_id);
       remote.once("value", $.proxy(this.renderLocalPlayer, this));
 		}

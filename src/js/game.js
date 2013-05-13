@@ -18,11 +18,12 @@ var authClient = new FirebaseAuthClient(Firebase, authClientHandler);
 
 
 
-var boundsWidth = 1024;
-var boundsHeight = 576;
+var boundsWidth = 240;
+var boundsHeight = 180;
 var baseWidth = window.innerWidth * (boundsHeight / window.innerHeight); //864
 var baseHeight = boundsHeight; //576
 var scale = window.innerHeight / baseHeight; //1
+Crafty.scale = scale;
 
 console.log("whats the window sizes",
   window.innerHeight, window.innerWidth,
@@ -54,9 +55,16 @@ function setScale(){
   console.log("setting scale");
   scale = window.innerWidth / Crafty.stage.elem.clientWidth;
     //make sure it's not bigger than the height
+
+    console.log("scale height check", Crafty.stage.elem.clientHeight,
+      window.innerHeight, window.clientHeight,
+      scale * Crafty.stage.elem.clientHeight);
+
     if (scale * Crafty.stage.elem.clientHeight > window.innerHeight) {
       scale = window.innerHeight / Crafty.stage.elem.clientHeight;
     }
+
+    Crafty.scale = scale;
     console.log("scale ==", scale);
 
     var stageStyle = Crafty.stage.elem.style;
@@ -69,18 +77,18 @@ function startGame(){
   var stats = new Stats();
   stats.domElement.style.position = 'absolute';
   stats.domElement.style.left = '0px';
-  stats.domElement.style.top = '0px';
+  stats.domElement.style.bottom = '0px';
   stats.domElement.style.zIndex = 9000;
   document.body.appendChild( stats.domElement );
-  Crafty.init(1024, 576).canvas.init();
-  var scale = window.innerWidth / Crafty.stage.width;
+  Crafty.init(boundsWidth, boundsHeight).canvas.init();
+  var stageStyle = Crafty.stage.elem.style;
+  stageStyle.transformOrigin = stageStyle.webkitTransformOrigin = stageStyle.mozTransformOrigin = "0 0";
+  stageStyle.transform = stageStyle.webkitTransform = stageStyle.mozTransform = "scale("+scale+")";
   Crafty.background("#FFFFFF");
   Crafty.bind("EnterFrame", function(){
     stats.begin();
     stats.end();
   });
-  Crafty.addEvent(this, window, "resize", setScale);
-  setScale();
   Crafty.scene("main");
 }
 
