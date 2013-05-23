@@ -1,4 +1,6 @@
 Crafty.c("PlayerControls", {
+  walkSpeed: 4,
+
   init: function() {
     this.requires("Keyboard")
     .bind("EnterFrame", $.proxy(this.enterFrameHandler, this))
@@ -14,22 +16,22 @@ Crafty.c("PlayerControls", {
     }
     //Left
     if(this.isDown(37)){
-      this.x-=4;
+      this.x-=this.walkSpeed;
     }
 
     //Right
     if(this.isDown(39)){
-      this.x+=4;
+      this.x+=this.walkSpeed;
     }
 
     //Up
     if(this.isDown(38)){
-      this.y-=4;
+      this.y-=this.walkSpeed;
     }
 
     //Down
     if(this.isDown(40)){
-      this.y+=4;
+      this.y+=this.walkSpeed;
     }
   },
 

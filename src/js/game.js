@@ -17,23 +17,22 @@ var Firebase = new Firebase('https://beatdowncity.firebaseIO.com/');
 var authClient = new FirebaseAuthClient(Firebase, authClientHandler);
 
 
-
-var boundsWidth = 240;
-var boundsHeight = 180;
+var boundsWidth = 200;
+var boundsHeight = 200;
 var baseWidth = window.innerWidth * (boundsHeight / window.innerHeight); //864
 var baseHeight = boundsHeight; //576
 var scale = window.innerHeight / baseHeight; //1
 Crafty.scale = scale;
 
-console.log("whats the window sizes",
-  window.innerHeight, window.innerWidth,
-  window.clientHeight, window.clientWidth);
+// console.log("whats the window sizes",
+//   window.innerHeight, window.innerWidth,
+//   window.clientHeight, window.clientWidth);
 
-console.log("whats the generated sizes",
-  boundsWidth, boundsHeight,
-  baseWidth, baseHeight);
+// console.log("whats the generated sizes",
+//   boundsWidth, boundsHeight,
+//   baseWidth, baseHeight);
 
-console.log("view scale", scale);
+// console.log("view scale", scale);
 
 function authClientHandler(error, user){
   if (error) {
@@ -80,10 +79,9 @@ function startGame(){
   stats.domElement.style.bottom = '0px';
   stats.domElement.style.zIndex = 9000;
   document.body.appendChild( stats.domElement );
-  Crafty.init(boundsWidth, boundsHeight).canvas.init();
-  var stageStyle = Crafty.stage.elem.style;
-  stageStyle.transformOrigin = stageStyle.webkitTransformOrigin = stageStyle.mozTransformOrigin = "0 0";
-  stageStyle.transform = stageStyle.webkitTransform = stageStyle.mozTransform = "scale("+scale+")";
+  Crafty.init(200, 200).canvas.init();
+  //setScale();
+  //Crafty.addEvent(this, window, "resize", setScale);
   Crafty.background("#FFFFFF");
   Crafty.bind("EnterFrame", function(){
     stats.begin();

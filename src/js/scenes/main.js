@@ -34,7 +34,7 @@ Crafty.scene("main",(function() {
         .addComponent('Collision, WiredHitBox')
         .addComponent('user_'+snapshot.name());
         player.remote = remoteUser;
-        //player.collision([50,30], [50,140], [100,140], [100,30]);
+        player.collision([10,7], [10,40], [30,40], [30,7]);
 
         //if its the local player publish events to remote
         if(snapshot.name() == Crafty.player_id){
@@ -59,11 +59,11 @@ Crafty.scene("main",(function() {
             // otherwise we will constantly trigger the users 'moved' handler
             // causing unexpected behavior
             if(state.x != player.x){
-              player.x = state.x / Crafty.scale;
+              player.x = state.x;
             }
 
             if(state.y != player.y){
-              player.y = state.y / Crafty.scale;
+              player.y = state.y;
             }
 
             var state = snapshot.val();
