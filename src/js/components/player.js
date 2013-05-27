@@ -19,8 +19,19 @@ Crafty.c("Player", {
    this.bind("Move", $.proxy(this.changeDirection, this));
    this.bind("Move", $.proxy(this.movingAnimation, this));
    this.bind('EnterFrame', $.proxy(this.enterFrameHandler, this));
-   this.animate("Standing",25,0);
+   this.bind("Change", $.proxy(this.animationChange, this));
+   this.animate("Standing",1,1).stop();
  },
+
+   animationChange: function(anything){
+    if(this._currentReelId === 'Punch' && this._frame.currentSlideNumber === 3){
+      console.log("punch hit");
+    }
+
+    if(this._currentReelId === 'Kick' && this._frame.currentSlideNumber === 3){
+      console.log("kick hit");
+    }
+   },
 
 
    movingAnimation: function(old_pos){
@@ -39,7 +50,7 @@ Crafty.c("Player", {
     }
   },
 
-  enterFrameHandler: function(){
+  enterFrameHandler: function(frameNum){
     if(this.isPlaying('Punch') ||
        this.isPlaying('Kick') ||
        this.isPlaying('Jump') ||
@@ -68,24 +79,45 @@ Crafty.c("Player", {
       }
     }
 
-    if(this.isPunching && !this.isPlaying('Punch')){
-      this.stop().animate('Punch',15,0).bind("AnimationEnd", function(reel){
-        this.isPunching = false;
-      });
+    if(this.isPlaying('Punch')){
+      console.log("Punching frame?", this._frame);
       return;
     }
 
+    if(this.isPunching && !this.isPlaying('Punch')){
+      return this.punch();
+    }
+
     if(this.isKicking){
-      this.stop().animate('Kick',15,0).bind('AnimationEnd', function(reel){
-        this.isKicking = false;        
-      });
-      return;
+      return this.kick();
     }
 
     if(this.isPlaying('Walking')){
       return;
     }
 
-    this.stop().animate("Standing",25,0);
+    if(this._currentReelId !== 'Standing' ){
+      console.log("stop standing");
+      this.stop().animate("Standing",1,-1);
+    }
+  },
+
+  kick: function(){
+    this.stop();
+    var ani = this.animate('Kick',15,0);
+        ani.bind('AnimationEnd', function(reel){
+          this.isKicking = false;
+        });
+    return;
+  },
+
+  punch: function(){
+    this.stop();
+    var ani = this.animate('Punch',15,0);
+        ani.bind("AnimationEnd", function(reel){
+          this.isPunching = false;
+        });
+    return;
   }
+
 });
