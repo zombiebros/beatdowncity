@@ -11,6 +11,7 @@ Crafty.c("KickBox", {
   })
    .addComponent('Collision, WiredHitBox')
    .setName('kickBox');
+
   },
 
   mirror: function(){

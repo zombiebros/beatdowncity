@@ -19,6 +19,32 @@ Crafty.scene("main",(function() {
       Firebase.child('users').once("value", $.proxy(this.renderOtherUsers, this));
     },
 
+    createDummy:function(){
+        var player = Crafty.e("Player")
+        .attr({
+          x:50,
+          y:0,
+          z: 2
+        })
+        .addComponent('Collision, WiredHitBox')
+        .addComponent('user_dummy');
+        player.collision([10,7], [10,40], [30,40], [30,7]);
+
+        player.punchbox = Crafty.e('PunchBox');
+        player.punchbox.attr({
+          x:player.x+25,
+          y:player.y+16
+        });
+        player.attach(player.punchbox);
+
+        player.kickbox = Crafty.e('KickBox');
+        player.kickbox.attr({
+          x:player.x+25,
+          y:player.y+22
+        });
+        player.attach(player.kickbox);
+    },
+
 
     renderUserSnapshot: function(snapshot){
       var remoteUser = Firebase.child('users').child(snapshot.name());
@@ -91,6 +117,7 @@ Crafty.scene("main",(function() {
       Crafty.background('resources/images/RiverCityRansomEX-RiverCity.png');
       var remote = Firebase.child('users').child(Crafty.player_id);
       remote.once("value", $.proxy(this.renderLocalPlayer, this));
+      //this.createDummy();
 		}
 	};
 

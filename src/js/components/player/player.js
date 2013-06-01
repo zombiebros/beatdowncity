@@ -16,22 +16,24 @@ Crafty.c("Player", {
    this.animate("Kick", 0,2,2);
    this.animate('Jump',5,0,5);
    this.animate('Land',6,0,6);
+   this.animate('Damage',0,4,0);
+   this.animate('Recover',1,4,0);
    this.bind("Move", $.proxy(this.changeDirection, this));
    this.bind("Move", $.proxy(this.movingAnimation, this));
    this.bind('EnterFrame', $.proxy(this.enterFrameHandler, this));
-   this.bind("Change", $.proxy(this.animationChange, this));
+   //this.bind("Change", $.proxy(this.animationChange, this));
    this.animate("Standing",1,1).stop();
  },
 
-   animationChange: function(anything){
-    if(this._currentReelId === 'Punch' && this._frame.currentSlideNumber === 3){
-      console.log("punch hit");
-    }
+   // animationChange: function(anything){
+   //  if(this._currentReelId === 'Punch' && this._frame.currentSlideNumber === 3){
+   //    console.log("punch hit");
+   //  }
 
-    if(this._currentReelId === 'Kick' && this._frame.currentSlideNumber === 3){
-      console.log("kick hit");
-    }
-   },
+   //  if(this._currentReelId === 'Kick' && this._frame.currentSlideNumber === 3){
+   //    console.log("kick hit");
+   //  }
+   // },
 
 
    movingAnimation: function(old_pos){
@@ -122,6 +124,11 @@ Crafty.c("Player", {
           this.isPunching = false;
         });
     return;
+  },
+
+  damage:function(amount){
+    console.log("taking some damage!");
+    this.animate('Damage', 1,-1);
   }
 
 });
