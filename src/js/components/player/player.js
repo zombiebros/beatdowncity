@@ -4,6 +4,8 @@ Crafty.c("Player", {
   isKicking: false,
   isRunning: false,
   isJumping: false,
+  isDamage: false,
+  isRecover: false,
   jumpHeight: 150,
   jumpSpeed: 10,
   preJumpY: null,
@@ -90,8 +92,12 @@ Crafty.c("Player", {
       return this.punch();
     }
 
-    if(this.isKicking){
+    if(this.isKicking && !this.isPlaying('Punch')){
       return this.kick();
+    }
+
+    if(this.isDamage && !this.isPlaying('Damage')){
+      return this.damage();
     }
 
     if(this.isPlaying('Walking')){
@@ -99,7 +105,6 @@ Crafty.c("Player", {
     }
 
     if(this._currentReelId !== 'Standing' ){
-      console.log("stop standing");
       this.stop().animate("Standing",1,-1);
     }
   },
@@ -122,9 +127,19 @@ Crafty.c("Player", {
     return;
   },
 
-  damage:function(amount){
-    console.log("taking some damage!");
-    this.animate('Damage', 50, 0);
+  //Apply damage amount and trigger animation
+  applyDamage:function(amount){
+    console.log("Applying Damage");
+    this.isDamage = true;
+  },
+
+  // Play damage animation
+  damage:function(){
+    console.log("playing damage!");
+    this.stop();
+    this.animate('Damage', 50, 0).bind('AnimationEnd', function(reel){
+      this.isDamage = false;
+    });
         //.animate("Recover", 50, 0);
   }
 
