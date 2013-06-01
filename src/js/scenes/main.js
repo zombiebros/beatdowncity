@@ -33,34 +33,19 @@ Crafty.scene("main",(function() {
         .addComponent('user_'+snapshot.name());
         player.remote = remoteUser;
         player.collision([10,7], [10,40], [30,40], [30,7]);
+        player.punchbox = Crafty.e('PunchBox');
+        player.punchbox.attr({
+          x:player.x+25,
+          y:player.y+16
+        });
+        player.attach(player.punchbox);
 
-           var punchBox = Crafty.e("2D, Canvas")
-                        .attr({
-                          w:10,
-                          h:10,
-                          //x:5,
-                          x:25,
-                          y:16,
-                          z:900
-                        })
-                        .addComponent('Collision, WiredHitBox')
-                        .setName('punchBox');
-                        player.attach(punchBox);
-                        player.punchBox = punchBox;
-
-           var kickBox = Crafty.e("2D, Canvas")
-                .attr({
-                  w:10,
-                  h:10,
-                  //x:5,
-                  x:23,
-                  y:22,
-                  z:900
-                })
-                .addComponent('Collision, WiredHitBox')
-                .setName('kickBox');
-                player.attach(kickBox);
-                player.kickBox= kickBox;
+        player.kickbox = Crafty.e('KickBox');
+        player.kickbox.attr({
+          x:player.x+25,
+          y:player.y+22
+        });
+        player.attach(player.kickbox);
 
         //if its the local player publish events to remote
         if(snapshot.name() == Crafty.player_id){

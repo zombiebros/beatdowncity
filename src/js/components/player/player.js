@@ -21,21 +21,6 @@ Crafty.c("Player", {
    this.bind('EnterFrame', $.proxy(this.enterFrameHandler, this));
    this.bind("Change", $.proxy(this.animationChange, this));
    this.animate("Standing",1,1).stop();
-
-   // var kickBox = Crafty.e("2D, Canvas")
-   // .attr({
-   //  w:13,
-   //  h:10,
-   //                //x:5,
-   //                x:25,
-   //                y:22,
-   //                z:900
-   //              })
-   // .addComponent('Collision, WiredHitBox')
-   // .setName('kickBox');
-   // this.attach(kickBox);
-   // this.kickBox= kickBox;
-   
  },
 
    animationChange: function(anything){
@@ -60,8 +45,12 @@ Crafty.c("Player", {
   changeDirection: function(old_pos){
     if(this._x > old_pos._x){
         this.unflip("X");
+        this.punchbox.unmirror();
+        this.kickbox.unmirror();
     }else if(this._x < old_pos._x){
         this.flip("X");
+        this.punchbox.mirror();
+        this.kickbox.mirror();
     }
   },
 
