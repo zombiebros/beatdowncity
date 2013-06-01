@@ -25,17 +25,6 @@ Crafty.c("Player", {
    this.animate("Standing",1,1).stop();
  },
 
-   // animationChange: function(anything){
-   //  if(this._currentReelId === 'Punch' && this._frame.currentSlideNumber === 3){
-   //    console.log("punch hit");
-   //  }
-
-   //  if(this._currentReelId === 'Kick' && this._frame.currentSlideNumber === 3){
-   //    console.log("kick hit");
-   //  }
-   // },
-
-
    movingAnimation: function(old_pos){
     if(this.isJumping || this.isLanding){ return;}
 
@@ -47,12 +36,22 @@ Crafty.c("Player", {
   changeDirection: function(old_pos){
     if(this._x > old_pos._x){
         this.unflip("X");
-        this.punchbox.unmirror();
-        this.kickbox.unmirror();
+        try{
+          this.punchbox.unmirror();
+          this.kickbox.unmirror();
+        }catch(ex){
+          console.log("Exception:", ex.message);
+          console.log("Couldn't update hitboxes haven't rendered yet");
+        }
     }else if(this._x < old_pos._x){
         this.flip("X");
-        this.punchbox.mirror();
-        this.kickbox.mirror();
+        try{
+          this.punchbox.mirror();
+          this.kickbox.mirror();
+        }catch(ex){
+          console.log("Exception:", ex.message);
+          console.log("Couldn't update hitboxes haven't rendered yet");
+        }
     }
   },
 
@@ -60,6 +59,8 @@ Crafty.c("Player", {
     if(this.isPlaying('Punch') ||
        this.isPlaying('Kick') ||
        this.isPlaying('Jump') ||
+       this.isPlaying('Damage') ||
+       this.isPlaying('Recover') ||
        this.isPlaying('Land')){
       return false;
     }
@@ -83,11 +84,6 @@ Crafty.c("Player", {
       }else{
         return this.y+= this.jumpSpeed;
       }
-    }
-
-    if(this.isPlaying('Punch')){
-      console.log("Punching frame?", this._frame);
-      return;
     }
 
     if(this.isPunching && !this.isPlaying('Punch')){
@@ -128,7 +124,8 @@ Crafty.c("Player", {
 
   damage:function(amount){
     console.log("taking some damage!");
-    this.animate('Damage', 1,-1);
+    this.animate('Damage', 50, 0);
+        //.animate("Recover", 50, 0);
   }
 
 });

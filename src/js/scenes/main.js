@@ -47,12 +47,16 @@ Crafty.scene("main",(function() {
 
 
     renderUserSnapshot: function(snapshot){
-      var remoteUser = Firebase.child('users').child(snapshot.name());
+      var remoteUser = Firebase.child('users').child(snapshot.name()),
+          userState = snapshot.val();
+
       if(Crafty('user_'+snapshot.name()).length === 0){ //only render the player once
+        console.log("We get snap shot? ", snapshot.val());
+        console.log("wtf am I doin", (typeof userState.x != 'undefined') ? userState.x : 0);
         var player = Crafty.e("Player")
         .attr({
-          x:0,
-          y:0,
+          x: (typeof userState.x != 'undefined') ? userState.x : 0,
+          y: (typeof userState.y != 'undefined') ? userState.y : 0,
           z: 2
         })
         .addComponent('Collision, WiredHitBox')

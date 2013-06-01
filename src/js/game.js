@@ -1,15 +1,15 @@
-if(typeof forge !== 'undefined'){
-  forge.logging.info("app starting !");
+// if(typeof forge !== 'undefined'){
+//   forge.logging.info("app starting !");
 
-  window.onerror = function(message, url, linenumber){
-    forge.logging.debug("JavaScript error: " + message + " on line " + linenumber + " for " + url+":"+linenumber);
-  };
+//   window.onerror = function(message, url, linenumber){
+//     forge.logging.debug("JavaScript error: " + message + " on line " + linenumber + " for " + url+":"+linenumber);
+//   };
 
-  console.log = function(){
-    var  args_array = Array.prototype.slice.call(arguments);
-    forge.logging.debug("Console.log: " + args_array.toString());
-  };
-}
+//   console.log = function(){
+//     var  args_array = Array.prototype.slice.call(arguments);
+//     forge.logging.debug("Console.log: " + args_array.toString());
+//   };
+// }
 
 
 // Initialize Crafty
