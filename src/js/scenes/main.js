@@ -32,12 +32,12 @@ Crafty.scene("main",(function() {
           z: 0
         })
         .addComponent('user_'+snapshot.name());
-        player.email = Crafty.player_email;
         player.remote = remoteUser;
 
         //if its the local player publish events to remote
         if(snapshot.name() == Crafty.player_id){
           player.addComponent('PlayerControls');
+          player.email = Crafty.player_email;
 
           // update remote animation states on every frame
           player.bind('EnterFrame', function(){
