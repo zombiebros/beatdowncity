@@ -39,7 +39,7 @@ function authClientHandler(error, user){
     authClientError(error, user);
   } else if (user) {
     Crafty.player_id = user.id;
-    Crafty.user_email = user.email;
+    Crafty.player_email = user.email;
     authClientSuccess(user);
   } else {
     authClientLogout();
@@ -81,8 +81,8 @@ function startGame(){
   stats.domElement.style.zIndex = 9000;
   document.body.appendChild( stats.domElement );
   Crafty.init(200, 200).canvas.init();
-  //setScale();
-  //Crafty.addEvent(this, window, "resize", setScale);
+  setScale();
+  Crafty.addEvent(this, window, "resize", setScale);
   Crafty.background("#FFFFFF");
   Crafty.bind("EnterFrame", function(){
     stats.begin();
@@ -103,6 +103,7 @@ function authClientLogout(){
 function authClientCreateUserHandler(error, user){
   if(!error){
     Crafty.player_id = user.id;
+    Crafty.player_email = user.email;
     startGame();
   }else{
     alert("Error creating user");

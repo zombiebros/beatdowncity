@@ -19,32 +19,6 @@ Crafty.scene("main",(function() {
       Firebase.child('users').once("value", $.proxy(this.renderOtherUsers, this));
     },
 
-    createDummy:function(){
-        var player = Crafty.e("Player")
-        .attr({
-          x:50,
-          y:0,
-          z: 2
-        })
-        .addComponent('Collision, WiredHitBox')
-        .addComponent('user_dummy');
-        player.collision([10,7], [10,40], [30,40], [30,7]);
-
-        player.punchbox = Crafty.e('PunchBox');
-        player.punchbox.attr({
-          x:player.x+25,
-          y:player.y+16
-        });
-        player.attach(player.punchbox);
-
-        player.kickbox = Crafty.e('KickBox');
-        player.kickbox.attr({
-          x:player.x+25,
-          y:player.y+22
-        });
-        player.attach(player.kickbox);
-    },
-
 
     renderUserSnapshot: function(snapshot){
       var remoteUser = Firebase.child('users').child(snapshot.name()),
@@ -58,6 +32,7 @@ Crafty.scene("main",(function() {
           z: 0
         })
         .addComponent('user_'+snapshot.name());
+        player.email = Crafty.player_email;
         player.remote = remoteUser;
 
         //if its the local player publish events to remote
@@ -69,6 +44,7 @@ Crafty.scene("main",(function() {
             remoteUser.set({
               x: this.x,
               y: this.y,
+              email: Crafty.player_email,
               isPunching: this.isPunching,
               isKicking: this.isKicking,
               isJumping: this.isJumping,
@@ -99,21 +75,48 @@ Crafty.scene("main",(function() {
             player.isDamage = state.isDamagin;
             player.isRecover = state.isRecover;
             player.preJumpy = state.preJumpy;
+            player.email = state.email;
           });
         }
 
         var player_name = Crafty.e('2D, DOM, Text, PlayerName')
-                                .text("Player Name")
+                                .text(player.email.match(/([_a-z0-9-]+(.[_a-z0-9-]+)*)@/)[1])
                                 .textColor("#000000")
                                 .textFont({size: "1px"})
                                 .attr({
                                   x: player.x,
                                   y: (player.y+player.h) + 2,
                                   w: player.w*2
-                                })
+                                });
         player.attach(player_name);
 
       }
+    },
+
+    createDummy:function(){
+      var player = Crafty.e("Player")
+      .attr({
+        x:50,
+        y:0,
+        z: 2
+      })
+      .addComponent('Collision, WiredHitBox')
+      .addComponent('user_dummy');
+      player.collision([10,7], [10,40], [30,40], [30,7]);
+
+      player.punchbox = Crafty.e('PunchBox');
+      player.punchbox.attr({
+        x:player.x+25,
+        y:player.y+16
+      });
+      player.attach(player.punchbox);
+
+      player.kickbox = Crafty.e('KickBox');
+      player.kickbox.attr({
+        x:player.x+25,
+        y:player.y+22
+      });
+      player.attach(player.kickbox);
     },
 
 		init: function(){

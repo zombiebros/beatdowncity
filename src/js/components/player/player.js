@@ -42,7 +42,8 @@ Crafty.c("Player", {
   preJumpY: null,
 
   init: function(){
-   this.requires("2D, Canvas, player1, SpriteAnimation, Collision, WiredHitBox");
+   this.requires("2D, Canvas, player1, SpriteAnimation, Collision");
+   //this.requires("WiredHitBox");
    this.collision([10,7], [10,40], [30,40], [30,7]);
    this.bindHitBoxes();
    this.animate('Walking',2,0,0);
@@ -84,7 +85,8 @@ Crafty.c("Player", {
     w:10,
     h:10
   })
-  .addComponent('Collision, WiredHitBox')
+  .addComponent('Collision')
+//  .addComponent('WiredHitBox')
   .onHit("Player", $.proxy(this.punchbox.hitPlayerHandler, this.punchbox));
   this.attach(this.punchbox);
 
@@ -99,7 +101,8 @@ Crafty.c("Player", {
     w:13,
     h:10
   })
-  .addComponent('Collision, WiredHitBox')
+  .addComponent('Collision')
+  //.addComponent('WiredHitBox')
   .onHit("Player", $.proxy(this.kickbox.hitPlayerHandler, this.kickbox));
   this.attach(this.kickbox);
  },
