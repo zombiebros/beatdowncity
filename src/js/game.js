@@ -39,6 +39,7 @@ function authClientHandler(error, user){
     authClientError(error, user);
   } else if (user) {
     Crafty.player_id = user.id;
+    Crafty.user_email = user.email;
     authClientSuccess(user);
   } else {
     authClientLogout();
@@ -104,7 +105,7 @@ function authClientCreateUserHandler(error, user){
     Crafty.player_id = user.id;
     startGame();
   }else{
-    alert("Error creating usere");
+    alert("Error creating user");
   }
 }
 

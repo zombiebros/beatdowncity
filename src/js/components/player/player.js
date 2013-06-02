@@ -150,11 +150,11 @@ Crafty.c("Player", {
       return false;
     }
 
-    if(this.isRecover && !this.isPlaying('Recover')){
+    if(this.isRecover === true && !this.isPlaying('Recover')){
       return this.recover();
     }
 
-    if(this.isDamage && !this.isPlaying('Damage')){
+    if(this.isDamage === true && !this.isPlaying('Damage')){
       return this.damage();
     }
 
@@ -167,7 +167,7 @@ Crafty.c("Player", {
         return this.y-= this.jumpSpeed;
     }
 
-    if(this.isLanding){
+    if(this.isLanding === true){
       if(this.y + this.jumpSpeed >= this.preJumpY){
         this.animate('Land', 2, -1);
         this.isLanding = false;
@@ -179,11 +179,11 @@ Crafty.c("Player", {
       }
     }
 
-    if(this.isPunching && !this.isPlaying('Punch')){
+    if(this.isPunching === true && !this.isPlaying('Punch')){
       return this.punch();
     }
 
-    if(this.isKicking && !this.isPlaying('Punch')){
+    if(this.isKicking === true && !this.isPlaying('Punch')){
       return this.kick();
     }
 
@@ -216,13 +216,18 @@ Crafty.c("Player", {
 
   //Apply damage amount and trigger animation
   applyDamage:function(amount){
+    if(this.isDamage === true){
+      return false;
+    }
     console.log("Applying Damage");
     this.isDamage = true;
   },
 
   recover: function(){
+    console.log("playing recover animation");
     this.stop();
     this.animate('Recover', 10, 0).bind('AnimationEnd', function(reel){
+      console.log("recover animation over");
       this.isRecover = false;
     });
   },
@@ -231,8 +236,9 @@ Crafty.c("Player", {
   damage: function(){
     console.log("playing damage!");
     var _self = this;
-    this.stop();
+//    this.stop();
     this.animate('Damage', 10, 0).bind('AnimationEnd', function(reel){
+      console.log("damage animation over");
       this.isDamage = false;
       this.isRecover = true;
     });

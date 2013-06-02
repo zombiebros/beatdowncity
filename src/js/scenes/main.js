@@ -48,7 +48,7 @@ Crafty.scene("main",(function() {
 
     renderUserSnapshot: function(snapshot){
       var remoteUser = Firebase.child('users').child(snapshot.name()),
-          userState = (snapshot.val() === null)? {} : snapshot.val();
+          userState = (snapshot.val() === null) ? {} : snapshot.val();
 
       if(Crafty('user_'+snapshot.name()).length === 0){ //only render the player once
         var player = Crafty.e("Player")
@@ -101,11 +101,23 @@ Crafty.scene("main",(function() {
             player.preJumpy = state.preJumpy;
           });
         }
+
+        var player_name = Crafty.e('2D, DOM, Text, PlayerName')
+                                .text("Player Name")
+                                .textColor("#000000")
+                                .textFont({size: "1px"})
+                                .attr({
+                                  x: player.x,
+                                  y: (player.y+player.h) + 2,
+                                  w: player.w*2
+                                })
+        player.attach(player_name);
+
       }
     },
 
 		init: function(){
-      Crafty.background('resources/images/RiverCityRansomEX-RiverCity.png');
+      //Crafty.background('resources/images/RiverCityRansomEX-RiverCity.png');
       var remote = Firebase.child('users').child(Crafty.player_id);
       remote.once("value", $.proxy(this.renderLocalPlayer, this));
 //      this.createDummy();
