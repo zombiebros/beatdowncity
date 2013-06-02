@@ -34,10 +34,22 @@ Crafty.scene("main",(function() {
         .addComponent('user_'+snapshot.name());
         player.remote = remoteUser;
 
+        console.log("wtf is email?", player.email);
+        var player_name = Crafty.e('2D, DOM, Text, PlayerName')
+                                .textColor("#000000")
+                                .textFont({size: "1px"})
+                                .attr({
+                                  x: player.x,
+                                  y: (player.y+player.h) + 2,
+                                  w: player.w*2
+                                });
+        player.attach(player_name);
+
         //if its the local player publish events to remote
         if(snapshot.name() == Crafty.player_id){
           player.addComponent('PlayerControls');
           player.email = Crafty.player_email;
+          player_name.text(player.email.match(/([_a-z0-9-]+(.[_a-z0-9-]+)*)@/)[1]);
 
           // update remote animation states on every frame
           player.bind('EnterFrame', function(){
@@ -50,6 +62,7 @@ Crafty.scene("main",(function() {
               isJumping: this.isJumping,
               isDamage: this.isDamage,
               isRecover: this.isRecover,
+              loggedin: true,
               preJumpy: false
             });
           });
@@ -76,20 +89,9 @@ Crafty.scene("main",(function() {
             player.isRecover = state.isRecover;
             player.preJumpy = state.preJumpy;
             player.email = state.email;
+            player_name.text(player.email.match(/([_a-z0-9-]+(.[_a-z0-9-]+)*)@/)[1]);
           });
         }
-
-        var player_name = Crafty.e('2D, DOM, Text, PlayerName')
-                                .text(player.email.match(/([_a-z0-9-]+(.[_a-z0-9-]+)*)@/)[1])
-                                .textColor("#000000")
-                                .textFont({size: "1px"})
-                                .attr({
-                                  x: player.x,
-                                  y: (player.y+player.h) + 2,
-                                  w: player.w*2
-                                });
-        player.attach(player_name);
-
       }
     },
 

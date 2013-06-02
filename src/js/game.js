@@ -97,6 +97,7 @@ function authClientSuccess(user){
 }
 
 function authClientLogout(){
+  Crafty(Crafty('user_'+Crafty.player_id)[0]).loggedin = false;
   //user loged out
 }
 
