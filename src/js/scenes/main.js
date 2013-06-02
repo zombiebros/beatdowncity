@@ -48,34 +48,17 @@ Crafty.scene("main",(function() {
 
     renderUserSnapshot: function(snapshot){
       var remoteUser = Firebase.child('users').child(snapshot.name()),
-          userState = snapshot.val();
+          userState = (snapshot.val() === null)? {} : snapshot.val();
 
       if(Crafty('user_'+snapshot.name()).length === 0){ //only render the player once
-        console.log("We get snap shot? ", snapshot.val());
-        console.log("wtf am I doin", (typeof userState.x != 'undefined') ? userState.x : 0);
         var player = Crafty.e("Player")
         .attr({
           x: (typeof userState.x != 'undefined') ? userState.x : 0,
           y: (typeof userState.y != 'undefined') ? userState.y : 0,
           z: 0
         })
-        .addComponent('Collision, WiredHitBox')
         .addComponent('user_'+snapshot.name());
         player.remote = remoteUser;
-        player.collision([10,7], [10,40], [30,40], [30,7]);
-        player.punchbox = Crafty.e('PunchBox');
-        player.punchbox.attr({
-          x:player.x+25,
-          y:player.y+16
-        });
-        player.attach(player.punchbox);
-
-        // player.kickbox = Crafty.e('KickBox');
-        // player.kickbox.attr({
-        //   x:player.x+25,
-        //   y:player.y+22
-        // });
-        // player.attach(player.kickbox);
 
         //if its the local player publish events to remote
         if(snapshot.name() == Crafty.player_id){

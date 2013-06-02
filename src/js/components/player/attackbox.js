@@ -1,18 +1,12 @@
-Crafty.c("PunchBox", {
+Crafty.c("AttackBox", {
   hitAnimation: "Punch",
   hitFrame: 3,
+  mirror_x: 5,
+  unmirror_x: 25,
 
   init: function() {
     this.requires("2D, Canvas");
-
-    this.attr({
-      w:10,
-      h:10,
-      z:900
-    })
-    .addComponent('Collision, WiredHitBox')
-    .onHit("Player", $.proxy(this.hitPlayerHandler, this))
-    .setName('punchBox');
+    //.onHit("Player", $.proxy(this.hitPlayerHandler, this));
   },
 
   hitPlayerHandler: function(players){
@@ -26,20 +20,9 @@ Crafty.c("PunchBox", {
         continue;
       }
 
-      try{
-        console.log("touching a dood thats not me",
-          this._parent._currentReelId,
-          this._parent._frame.currentSlideNumber);
-      }catch(ex){
-        console.log("Exception:",ex.message);
-      }
-
-      console.log("lol wtf where am I", this._parent.frame, this._parent.isPlaying);
-
       if(typeof this._parent._frame != 'undefined' &&  //For some reason frame isnt gauranteed? wtf
          this._parent.isPlaying(this.hitAnimation) &&
          this._parent._frame.currentSlideNumber == this.hitFrame){
-        console.log("LETS RIP");
         player.applyDamage();
       }
     }
@@ -48,15 +31,14 @@ Crafty.c("PunchBox", {
   mirror: function(){
     var _self = this;
     this.attr({
-      x:_self._parent.x+5
+      x:_self._parent.x+_self.mirror_x
     });
   },
 
   unmirror: function(){
     var _self = this;
     this.attr({
-      x:_self._parent.x+25
+      x:_self._parent.x+_self.unmirror_x
     });
   }
 });
-
