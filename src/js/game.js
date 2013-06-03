@@ -52,20 +52,14 @@ function authClientError(error, user){
 }
 
 function setScale(){
-  console.log("setting scale");
   scale = window.innerWidth / Crafty.stage.elem.clientWidth;
     //make sure it's not bigger than the height
-
-    console.log("scale height check", Crafty.stage.elem.clientHeight,
-      window.innerHeight, window.clientHeight,
-      scale * Crafty.stage.elem.clientHeight);
 
     if (scale * Crafty.stage.elem.clientHeight > window.innerHeight) {
       scale = window.innerHeight / Crafty.stage.elem.clientHeight;
     }
 
     Crafty.scale = scale;
-    console.log("scale ==", scale);
 
     var stageStyle = Crafty.stage.elem.style;
     stageStyle.transformOrigin = stageStyle.webkitTransformOrigin = stageStyle.mozTransformOrigin = "0 0";

@@ -34,7 +34,6 @@ Crafty.scene("main",(function() {
         .addComponent('user_'+snapshot.name());
         player.remote = remoteUser;
 
-        console.log("wtf is email?", player.email);
         var player_name = Crafty.e('2D, DOM, Text, PlayerName')
                                 .textColor("#000000")
                                 .textFont({size: "1px"})

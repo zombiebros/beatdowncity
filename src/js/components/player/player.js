@@ -110,7 +110,7 @@ Crafty.c("Player", {
 
  movingAnimation: function(old_pos){
   if(!this.isPlaying('Walking') &&
-     (!this.isJumping || !this.isLanding)){
+     (!this.isJumping && !this.isLanding)){
     this.animate('Walking',25, 1);
   }
 },
@@ -146,10 +146,8 @@ Crafty.c("Player", {
 
     if(this.isPlaying('Punch') ||
        this.isPlaying('Kick') ||
-       this.isPlaying('Jump') ||
        this.isPlaying('Damage') ||
-       this.isPlaying('Recover') ||
-       this.isPlaying('Land')){
+       this.isPlaying('Recover')){
       return false;
     }
 

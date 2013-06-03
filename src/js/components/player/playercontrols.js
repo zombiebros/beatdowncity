@@ -63,6 +63,7 @@ Crafty.c("PlayerControls", {
     if(!this.preJumpY){
       this.preJumpY = this.y;
     }
+    this.stop();
     this.isJumping = true;
   }
 
