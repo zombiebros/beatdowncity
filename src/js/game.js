@@ -138,3 +138,11 @@ $(function(){
   $('#signup').submit(signupSubmit);
   $('#login').submit(loginSubmit);
 });
+
+// $(window).bind('beforeunload', function(){
+//   var answer = confirm("Do you really want to leave Beatdown City?");
+//   if(anwser === true){
+//      Crafty(Crafty('user_'+Crafty.player_id)[0]).loggedin = false;
+//      return true;
+//   }
+// });

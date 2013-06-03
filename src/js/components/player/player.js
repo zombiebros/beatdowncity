@@ -34,11 +34,12 @@ Crafty.c("Player", {
   isKicking: false,
   isRunning: false,
   isJumping: false,
+  isLanding: false,
   isDamage: false,
   isRecover: false,
 
-  jumpHeight: 150,
-  jumpSpeed: 10,
+  jumpHeight: 50,
+  jumpSpeed: 4,
   preJumpY: null,
 
   init: function(){
@@ -108,9 +109,8 @@ Crafty.c("Player", {
  },
 
  movingAnimation: function(old_pos){
-  if(this.isJumping || this.isLanding){ return;}
-
-  if(!this.isPlaying('Walking')){
+  if(!this.isPlaying('Walking') &&
+     (!this.isJumping || !this.isLanding)){
     this.animate('Walking',25, 1);
   }
 },
@@ -162,8 +162,9 @@ Crafty.c("Player", {
     }
 
     if(this.isJumping){
+        console.log("playing jump animation");
         this.animate('Jump',1,-1);
-        if(this.y - this.jumpSpeed <= (this.preJumpY - this.jumpHeight)){
+        if((this.y - this.jumpSpeed) <= (this.preJumpY - this.jumpHeight)){
           this.isJumping = false;
           this.isLanding = true;
         }
@@ -171,7 +172,7 @@ Crafty.c("Player", {
     }
 
     if(this.isLanding === true){
-      if(this.y + this.jumpSpeed >= this.preJumpY){
+      if((this.y + this.jumpSpeed) >= this.preJumpY){
         this.animate('Land', 2, -1);
         this.isLanding = false;
         this.y = this.preJumpY;

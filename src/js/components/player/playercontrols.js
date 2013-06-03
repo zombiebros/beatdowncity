@@ -60,10 +60,10 @@ Crafty.c("PlayerControls", {
       return false;
     }
 
-    this.isJumping = true;
     if(!this.preJumpY){
       this.preJumpY = this.y;
     }
+    this.isJumping = true;
   }
 
 });
