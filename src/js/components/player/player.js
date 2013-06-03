@@ -54,7 +54,7 @@ Crafty.c("Player", {
    this.animate('Jump',5,0,5);
    this.animate('Land',6,0,6);
    this.animate('Damage',0,4,0);
-   this.animate('Recover',1,4,0);
+   this.animate('Recover',1,4,1);
    //this.registerAnimations();
    this.bind("Move", $.proxy(this.changeDirection, this));
    this.bind("Move", $.proxy(this.movingAnimation, this));
@@ -229,10 +229,9 @@ Crafty.c("Player", {
 
   recover: function(){
     console.log("playing recover animation");
-    this.stop();
     this.animate('Recover', 10, 0).bind('AnimationEnd', function(reel){
-      console.log("recover animation over");
       this.isRecover = false;
+      this.stop();
     });
   },
 
@@ -240,10 +239,9 @@ Crafty.c("Player", {
   damage: function(){
     console.log("playing damage!");
     var _self = this;
-//    this.stop();
     this.animate('Damage', 10, 0).bind('AnimationEnd', function(reel){
-      console.log("damage animation over");
       this.isDamage = false;
+      this.stop();
       this.isRecover = true;
     });
   }

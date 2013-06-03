@@ -24,7 +24,7 @@ Crafty.scene("main",(function() {
       var remoteUser = Firebase.child('users').child(snapshot.name()),
           userState = (snapshot.val() === null) ? {} : snapshot.val();
 
-      if(Crafty('user_'+snapshot.name()).length === 0 && userState.loggedin === true){ //only render the player once
+      if(Crafty('user_'+snapshot.name()).length === 0){ //only render the player once
         var player = Crafty.e("Player")
         .attr({
           x: (typeof userState.x != 'undefined') ? userState.x : 0,
