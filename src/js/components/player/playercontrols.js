@@ -1,5 +1,5 @@
 Crafty.c("PlayerControls", {
-  walkSpeed: 2,
+  walkSpeed: 1.5,
 
   init: function() {
     this.requires("Keyboard")

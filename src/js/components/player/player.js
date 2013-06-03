@@ -111,7 +111,7 @@ Crafty.c("Player", {
  movingAnimation: function(old_pos){
   if(!this.isPlaying('Walking') &&
      (!this.isJumping && !this.isLanding)){
-    this.animate('Walking',25, 1);
+    this.animate('Walking',50, 1);
   }
 },
 
