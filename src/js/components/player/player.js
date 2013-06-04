@@ -32,6 +32,7 @@ Crafty.c("Player", {
 
   /*
   * Player Sprite animations
+  * reverse ordered for priority
   */
   this.animation_map = [
     ["Standing",0,0,0],
@@ -42,9 +43,9 @@ Crafty.c("Player", {
     ["FinPunch",6,1,8],
     ['Jump',5,0,5],
     ['Land',6,0,6],
+    ['Recover',1,4,0],
     ['BackDamage',0,4,0],
-    ['FrontDamage',2,4,0],
-    ['Recover',1,4,0]
+    ['FrontDamage',2,4,0]
   ];
 
 
@@ -139,30 +140,30 @@ Crafty.c("Player", {
   },
 
   enterFrameHandler: function(frameNum){
-    var ani = this.animation_map.length;
-    for(var i=ani; i--;){
-      if(this.animation_map[i][0] === 'Standing'){
-        continue;
-      // If theres an animation playing do return
-      }else if(this.isPlaying(this.animation_map[i][0])){
-        return false;
-      // If the user stat is set and the animations not playing,
-      // call the method to play it
-      }else if(this['is'+this.animation_map[i][0]] === true &&
-               !this.isPlaying(this.animation_map[i][0])){
-        return this[this.animation_map[i][0].toLowerCase()];
-      }
-    }
-
-    // if(this.isPlaying('Punch') ||
-    //    this.isPlaying('Kick') ||
-    //    this.isPlaying('FinPunch') ||
-    //    this.isPlaying('FinKick') ||
-    //    this.isPlaying('FrontDamage') ||
-    //    this.isPlaying('BackDamage') ||
-    //    this.isPlaying('Recover')){
-    //   return false;
+    // var ani = this.animation_map.length;
+    // for(var i=ani; i--;){
+    //   if(this.animation_map[i][0] === 'Standing'){
+    //     continue;
+    //   // If theres an animation playing do return
+    //   }else if(this.isPlaying(this.animation_map[i][0])){
+    //     return false;
+    //   // If the user stat is set and the animations not playing,
+    //   // call the method to play it
+    //   }else if(this['is'+this.animation_map[i][0]] === true &&
+    //            !this.isPlaying(this.animation_map[i][0])){
+    //     return this[this.animation_map[i][0].toLowerCase()];
+    //   }
     // }
+
+    if(this.isPlaying('Punch') ||
+       this.isPlaying('Kick') ||
+       this.isPlaying('FinPunch') ||
+       this.isPlaying('FinKick') ||
+       this.isPlaying('FrontDamage') ||
+       this.isPlaying('BackDamage') ||
+       this.isPlaying('Recover')){
+      return false;
+    }
 
     if(this.isRecover === true && !this.isPlaying('Recover')){
       return this.recover();
@@ -170,10 +171,6 @@ Crafty.c("Player", {
 
     if(this.isFrontDamage === true && !this.isPlaying('FrontDamage')){
       return this.damage('front');
-    }
-
-    if(this.isDamage === true && !this.isPlaying('Damage')){
-      return this.damage('side');
     }
 
     if(this.isJumping){
