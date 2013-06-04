@@ -1,8 +1,22 @@
 Crafty.c("Player", {
+  isPunching: false,
+  isKicking: false,
+  isRunning: false,
+  isJumping: false,
+  isLanding: false,
+  isFrontDamage: false,
+  isBackDamage: false,
+  isRecover: false,
+
+  jumpHeight: 50,
+  jumpSpeed: 4,
+  preJumpY: null,
+
+  init: function(){
   /*
   * Player Game Stats
   */
-  stats:{
+  this.stats = {
     //statname:      [current, max]
     punch:           [15, 63],
     kick:            [15, 63],
@@ -12,50 +26,33 @@ Crafty.c("Player", {
     defense:         [15, 63],
     strength:        [15, 63],
     will_power:      [15, 63],
-    current_life:    [63, 127],
-    max_life:        [63, 127]
-  },
+    stanima:         [63, 127],
+    max_power:       [63, 127]
+  };
 
   /*
   * Player Sprite animations
   */
-  animation_map:{
-    "Walking":       [2,0,0],
-    "Standing":      [0,0,0],
-    "Punch":         [0,1,2],
-    "Kick":          [0,2,2],
-    'Jump':          [5,0,5],
-    'Land':          [6,0,6],
-    'Damage':        [0,4,0],
-    'Recover':       [1,4,0]
-  },
+  this.animation_map = [
+    ["Standing",0,0,0],
+    ["Walking",2,0,0],
+    ["Punch",0,1,2],
+    ["Kick",0,2,2],
+    ["FinKick",3,2,3],
+    ["FinPunch",6,1,8],
+    ['Jump',5,0,5],
+    ['Land',6,0,6],
+    ['BackDamage',0,4,0],
+    ['FrontDamage',2,4,0],
+    ['Recover',1,4,0]
+  ];
 
-  isPunching: false,
-  isKicking: false,
-  isRunning: false,
-  isJumping: false,
-  isLanding: false,
-  isDamage: false,
-  isRecover: false,
 
-  jumpHeight: 50,
-  jumpSpeed: 4,
-  preJumpY: null,
-
-  init: function(){
    this.requires("2D, Canvas, player1, SpriteAnimation, Collision");
-   //this.requires("WiredHitBox");
+   this.requires("WiredHitBox");
    this.collision([10,7], [10,40], [30,40], [30,7]);
    this.bindHitBoxes();
-   this.animate('Walking',2,0,0);
-   this.animate("Standing", 0,0,0);
-   this.animate("Punch", 0,1,2);
-   this.animate("Kick", 0,2,2);
-   this.animate('Jump',5,0,5);
-   this.animate('Land',6,0,6);
-   this.animate('Damage',0,4,0);
-   this.animate('Recover',1,4,1);
-   //this.registerAnimations();
+   this.registerAnimations();
    this.bind("Move", $.proxy(this.changeDirection, this));
    this.bind("Move", $.proxy(this.movingAnimation, this));
    this.bind('EnterFrame', $.proxy(this.enterFrameHandler, this));
@@ -64,16 +61,20 @@ Crafty.c("Player", {
  },
 
  /*
- * Iterate over our animation map and call `this.animate` with the name and frames
+ * Iterate over our animation map and call `this.animate` 
+ * with the name and frames saves some redundant code
  */
- // registerAnimations: function(){
- //  var args;
- //  for(var animation in this.animation_map){
- //    args = this.animation_map[animation];
- //    args.unshift(animation);
- //    this.animate.apply(this, args);
- //  }
- // },
+ registerAnimations: function(){
+  // var args;
+  // for(var animation in this.animation_map){
+  //   args = this.animation_map[animation];
+  //   args.unshift(animation);
+  //   this.animate.apply(this, args);
+  // }
+     for(var i=0; i<this.animation_map.length; i++){
+        this.animate.apply(this,this.animation_map[i]);
+     }
+ },
 
 
  bindHitBoxes: function(){
@@ -87,7 +88,7 @@ Crafty.c("Player", {
     h:10
   })
   .addComponent('Collision')
-//  .addComponent('WiredHitBox')
+  .addComponent('WiredHitBox')
   .onHit("Player", $.proxy(this.punchbox.hitPlayerHandler, this.punchbox));
   this.attach(this.punchbox);
 
@@ -103,7 +104,7 @@ Crafty.c("Player", {
     h:10
   })
   .addComponent('Collision')
-  //.addComponent('WiredHitBox')
+  .addComponent('WiredHitBox')
   .onHit("Player", $.proxy(this.kickbox.hitPlayerHandler, this.kickbox));
   this.attach(this.kickbox);
  },
@@ -138,29 +139,44 @@ Crafty.c("Player", {
   },
 
   enterFrameHandler: function(frameNum){
-    // for(var animation in this.animation_map){
-    //   if(animation != 'Standing' && this.isPlaying(animation)){
-    //     return false;
-    //   }
-    // }
-
-    if(this.isPlaying('Punch') ||
-       this.isPlaying('Kick') ||
-       this.isPlaying('Damage') ||
-       this.isPlaying('Recover')){
-      return false;
+    var ani = this.animation_map.length;
+    for(var i=ani; i--;){
+      if(this.animation_map[i][0] === 'Standing'){
+        continue;
+      // If theres an animation playing do return
+      }else if(this.isPlaying(this.animation_map[i][0])){
+        return false;
+      // If the user stat is set and the animations not playing,
+      // call the method to play it
+      }else if(this['is'+this.animation_map[i][0]] === true &&
+               !this.isPlaying(this.animation_map[i][0])){
+        return this[this.animation_map[i][0].toLowerCase()];
+      }
     }
+
+    // if(this.isPlaying('Punch') ||
+    //    this.isPlaying('Kick') ||
+    //    this.isPlaying('FinPunch') ||
+    //    this.isPlaying('FinKick') ||
+    //    this.isPlaying('FrontDamage') ||
+    //    this.isPlaying('BackDamage') ||
+    //    this.isPlaying('Recover')){
+    //   return false;
+    // }
 
     if(this.isRecover === true && !this.isPlaying('Recover')){
       return this.recover();
     }
 
+    if(this.isFrontDamage === true && !this.isPlaying('FrontDamage')){
+      return this.damage('front');
+    }
+
     if(this.isDamage === true && !this.isPlaying('Damage')){
-      return this.damage();
+      return this.damage('side');
     }
 
     if(this.isJumping){
-        console.log("playing jump animation");
         this.animate('Jump',1,-1);
         if((this.y - this.jumpSpeed) <= (this.preJumpY - this.jumpHeight)){
           this.isJumping = false;
@@ -198,6 +214,10 @@ Crafty.c("Player", {
     }
   },
 
+  jump: function(){
+
+  },
+
   kick: function(){
     this.stop();
     var ani = this.animate('Kick',15,0);
@@ -217,28 +237,38 @@ Crafty.c("Player", {
   },
 
   //Apply damage amount and trigger animation
-  applyDamage:function(amount){
+  applyDamage:function(amount, side){
     if(this.isDamage === true){
       return false;
     }
-    console.log("Applying Damage");
-    this.isDamage = true;
+    console.log("Applying Damage", amount);
+    this.stats.stanima[1] -= amount;
+    this["is"+side+"Damage"] = true;
   },
 
   recover: function(){
-    console.log("playing recover animation");
     this.animate('Recover', 10, 0).bind('AnimationEnd', function(reel){
       this.isRecover = false;
       this.stop();
     });
   },
 
+  frontdamage: function(){
+    this.damage('Front');
+  },
+
+  backdamage: function(){
+    this.damage('Back');
+  },
+
   // Play damage animation
-  damage: function(){
-    console.log("playing damage!");
+  damage: function(side){
     var _self = this;
-    this.animate('Damage', 10, 0).bind('AnimationEnd', function(reel){
-      this.isDamage = false;
+
+    side = (typeof side === 'undefined') ? 'Front' : side;
+
+    this.animate(side+'Damage', 10, 0).bind('AnimationEnd', function(reel){
+      this['is'+side+'Damage'] = false;
       this.stop();
       this.isRecover = true;
     });

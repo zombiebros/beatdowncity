@@ -60,10 +60,12 @@ Crafty.scene("main",(function() {
               isKicking: this.isKicking,
               isJumping: this.isJumping,
               isLanding: this.isLanding,
-              isDamage: this.isDamage,
+              isFrontDamage: this.isFrontDamage,
+              isBackDamage: this.isBackDamage,
               isRecover: this.isRecover,
               loggedin: true,
-              preJumpY: this.preJumpY
+              preJumpY: this.preJumpY,
+              stats: this.stats
             });
           });
 
@@ -90,6 +92,7 @@ Crafty.scene("main",(function() {
             player.isRecover = state.isRecover;
             player.preJumpy = state.preJumpy;
             player.email = state.email;
+            player.stats = state.stats;
             player_name.text(player.email.match(/([_a-z0-9-]+(.[_a-z0-9-]+)*)@/)[1]);
           });
         }
@@ -106,20 +109,6 @@ Crafty.scene("main",(function() {
       .addComponent('Collision, WiredHitBox')
       .addComponent('user_dummy');
       player.collision([10,7], [10,40], [30,40], [30,7]);
-
-      player.punchbox = Crafty.e('PunchBox');
-      player.punchbox.attr({
-        x:player.x+25,
-        y:player.y+16
-      });
-      player.attach(player.punchbox);
-
-      player.kickbox = Crafty.e('KickBox');
-      player.kickbox.attr({
-        x:player.x+25,
-        y:player.y+22
-      });
-      player.attach(player.kickbox);
     },
 
 		init: function(){
