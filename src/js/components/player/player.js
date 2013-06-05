@@ -150,6 +150,8 @@ Crafty.c("Player", {
 
     if(this.isPlaying('Punch') ||
        this.isPlaying('Kick') ||
+       this.isPlaying('Jump') ||
+       this.isPlaying('Land') ||
        this.isPlaying('FinPunch') ||
        this.isPlaying('FinKick') ||
        this.isPlaying('FrontDamage') ||
@@ -169,6 +171,14 @@ Crafty.c("Player", {
     if(this.isBackDamage === true && !this.isPlaying('BackDamage')){
       return this.backdamage();
     }
+
+    if(this.isJumping && !this.isPlaying('Jump')){
+        return this.animate('Jump', 5, -1);
+    }
+
+    // if(this.isLanding === true && !this.isPlaying('Land')){
+    //    return this.animate('Land', 2, 1);
+    // }
 
     // if(this.isJumping && !this.isPlaying('Jump')){
     //     console.log("should play jump animation");
@@ -261,7 +271,7 @@ Crafty.c("Player", {
 
     side = (typeof side === 'undefined') ? 'Front' : side;
 
-    this.animate(side+'Damage', 10, 0).bind('AnimationEnd', function(reel){
+    this.animate(side+'Damage', 15, 0).bind('AnimationEnd', function(reel){
       this['is'+side+'Damage'] = false;
       this.stop();
       if(this.stats.energy[0] <= this.stats.max_energy[0] / 2){

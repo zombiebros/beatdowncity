@@ -1,8 +1,10 @@
 Crafty.c("PlayerControls", {
   walkSpeed: 1,
-  jumpHeight: 50,
-  jumpSpeed: 2,
+  yV: 0,
+  gravity: 0.2,
+  jumpHeight: 40,
   preJumpY: null,
+  jumpV: 4,
 
   init: function() {
     this.requires("Keyboard")
@@ -17,22 +19,32 @@ Crafty.c("PlayerControls", {
     }
 
     if(this.isLanding === true){
-      if((this.y + this.jumpSpeed) >= this.preJumpY){
+      if((this.y + this.yV) >= this.preJumpY){
         this.isLanding = false;
         this.y = this.preJumpY;
+        this.stop();
+        this.animate('Land', 2, 1);
+        this.yV = 0;
         this.preJumpY = false;
         return;
-      }else{
-        return this.y+= this.jumpSpeed;
       }
+
+        this.y += this.yV;
+        this.yV += this.gravity;
+        return;
     }
 
     if(this.isJumping === true){
-      if((this.y - this.jumpSpeed) <= (this.preJumpY - this.jumpHeight)){
+      if((this.y - this.yV) <= (this.preJumpY - this.jumpHeight)){
+        this.yV = 0;
         this.isJumping = false;
         this.isLanding = true;
+        return;
       }
-      return this.y-= this.jumpSpeed;
+
+      this.y -= this.yV;
+      this.yV -= this.gravity;
+      return;
     }
 
     //Left
@@ -72,11 +84,11 @@ Crafty.c("PlayerControls", {
     }
 
     if(this.isDown(32)){
-        this.jump();
+        this.startJump();
     }
   },
 
-  jump: function(){
+  startJump: function(){
     if(this.isJumping === true ||
        this.isLanding === true){
       return false;
@@ -85,6 +97,11 @@ Crafty.c("PlayerControls", {
     if(!this.preJumpY){
       this.preJumpY = this.y;
     }
+
+    if(this.yV === 0){
+      this.yV = this.jumpV;
+    }
+
     this.isJumping = true;
   }
 
