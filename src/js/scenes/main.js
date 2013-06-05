@@ -88,7 +88,8 @@ Crafty.scene("main",(function() {
             player.isKicking = state.isKicking;
             player.isJumping = state.isJumping;
             player.isLanding = state.isLanding;
-            player.isDamage = state.isDamagin;
+            player.isFrontDamage = state.isFrontDamage;
+            player.isBackDamage = state.isBackDamage;
             player.isRecover = state.isRecover;
             player.preJumpy = state.preJumpy;
             player.email = state.email;

@@ -1,5 +1,8 @@
 Crafty.c("PlayerControls", {
-  walkSpeed: 1.5,
+  walkSpeed: 1,
+  jumpHeight: 50,
+  jumpSpeed: 2,
+  preJumpY: null,
 
   init: function() {
     this.requires("Keyboard")
@@ -9,29 +12,47 @@ Crafty.c("PlayerControls", {
 
   enterFrameHandler:function(){
     if(this.isPlaying('Punch') ||
-     this.isPlaying('Kick') ||
-     this.isPlaying('Jump') ||
-     this.isPlaying('Land')){
+     this.isPlaying('Kick')){
      return false;
     }
+
+    if(this.isLanding === true){
+      if((this.y + this.jumpSpeed) >= this.preJumpY){
+        this.isLanding = false;
+        this.y = this.preJumpY;
+        this.preJumpY = false;
+        return;
+      }else{
+        return this.y+= this.jumpSpeed;
+      }
+    }
+
+    if(this.isJumping === true){
+      if((this.y - this.jumpSpeed) <= (this.preJumpY - this.jumpHeight)){
+        this.isJumping = false;
+        this.isLanding = true;
+      }
+      return this.y-= this.jumpSpeed;
+    }
+
     //Left
     if(this.isDown(37)){
-      this.x-=this.walkSpeed;
+      return this.x-=this.walkSpeed;
     }
 
     //Right
     if(this.isDown(39)){
-      this.x+=this.walkSpeed;
+      return this.x+=this.walkSpeed;
     }
 
     //Up
     if(this.isDown(38)){
-      this.y-=this.walkSpeed;
+      return this.y-=this.walkSpeed;
     }
 
     //Down
     if(this.isDown(40)){
-      this.y+=this.walkSpeed;
+      return this.y+=this.walkSpeed;
     }
   },
 
@@ -56,14 +77,14 @@ Crafty.c("PlayerControls", {
   },
 
   jump: function(){
-    if(this.isJumping === true || this.isLanding === true){
+    if(this.isJumping === true ||
+       this.isLanding === true){
       return false;
     }
 
     if(!this.preJumpY){
       this.preJumpY = this.y;
     }
-    this.stop();
     this.isJumping = true;
   }
 
