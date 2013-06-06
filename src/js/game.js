@@ -68,20 +68,10 @@ function setScale(){
 
 function startGame(){
   $('#landing').remove();
-  var stats = new Stats();
-  stats.domElement.style.position = 'absolute';
-  stats.domElement.style.left = '0px';
-  stats.domElement.style.bottom = '0px';
-  stats.domElement.style.zIndex = 9000;
-  document.body.appendChild( stats.domElement );
   Crafty.init(200, 200).canvas.init();
   setScale();
   Crafty.addEvent(this, window, "resize", setScale);
   Crafty.background("#FFFFFF");
-  Crafty.bind("EnterFrame", function(){
-    stats.begin();
-    stats.end();
-  });
   Crafty.scene("main");
 }
 

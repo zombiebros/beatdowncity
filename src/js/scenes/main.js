@@ -60,6 +60,12 @@ Crafty.scene("main",(function() {
     },
 
 		init: function(){
+      Crafty.e("FPS").FPS('frame', -1).attr({
+        x: 0,
+        y: 0
+      }).css({
+        'color': 'Black'
+      });
       //Crafty.background('resources/images/RiverCityRansomEX-RiverCity.png');
       var remote = Firebase.child('users').child(Crafty.player_id);
       remote.once("value", $.proxy(this.renderLocalPlayer, this));
