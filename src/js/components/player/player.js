@@ -4,6 +4,7 @@ Crafty.c("Player", {
   isRunning: false,
   isJumping: false,
   isLanding: false,
+  isCrouching: false,
   isFrontDamageing: false,
   isBackDamageing: false,
   isRecovering: false,
@@ -37,6 +38,7 @@ Crafty.c("Player", {
     ["FinPunch",6,1,8],
     ['Jump',5,0,5],
     ['Land',6,0,6],
+    ['Crouch',6,0,6],
     ["Punch",0,1,2],
     ["Kick",0,2,2],
     ['Recover',1,4,1],
@@ -55,6 +57,17 @@ Crafty.c("Player", {
    this.bind("Move", $.proxy(this.movingAnimation, this));
    this.bind('EnterFrame', $.proxy(this.enterFrameHandler, this));
    this.animate("Standing",1,1).stop();
+
+
+   this.player_name = Crafty.e('2D, DOM, Text, PlayerName')
+                           .textColor("#000000")
+                           .textFont({size: "1px"})
+                           .attr({
+                            x: this.x,
+                            y: (this.y+this.h) + 2,
+                            w: this.w*2
+                           });
+   this.attach(this.player_name);
  },
 
  /*
@@ -164,6 +177,13 @@ Crafty.c("Player", {
 
   land:function(){}, //noop
 
+  crouch:function(){
+    this.animate('Crouch',1,1).bind('AnimationEnd', function(){
+      this.isCrouching = false;
+    });
+    return;
+  },
+
   kick: function(){
     this.stop();
     var ani = this.animate('Kick',15,0);
@@ -184,18 +204,18 @@ Crafty.c("Player", {
 
   //Apply damage amount and trigger animation
   applyDamage:function(amount, side){
-    if(this.isBackDamage === true ||
-       this.isFrontDamage === true){
+    if(this.isBackDamageing === true ||
+       this.isFrontDamageing === true){
       return false;
     }
     console.log("Applying Damage", this.stats);
     this.stats.energy[0] -= amount;
-    this["is"+side+"Damage"] = true;
+    this["is"+side+"Damageing"] = true;
   },
 
   recover: function(){
     this.animate('Recover', 20, 0).bind('AnimationEnd', function(reel){
-      this.isRecover = false;
+      this.isRecovering = false;
       this.stop();
     });
   },
@@ -215,10 +235,10 @@ Crafty.c("Player", {
     side = (typeof side === 'undefined') ? 'Front' : side;
 
     this.animate(side+'Damage', 15, 0).bind('AnimationEnd', function(reel){
-      this['is'+side+'Damage'] = false;
+      this['is'+side+'Damageing'] = false;
       this.stop();
       if(this.stats.energy[0] <= this.stats.max_energy[0] / 2){
-        this.isRecover = true;
+        this.isRecovering = true;
       }
     });
   }

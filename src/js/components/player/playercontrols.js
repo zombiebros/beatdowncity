@@ -5,6 +5,8 @@ Crafty.c("PlayerControls", {
   jumpHeight: 40,
   preJumpY: null,
   jumpV: 4,
+  dashLeft: 0,
+  dashRight: 0,
 
   init: function() {
     this.requires("Keyboard")
@@ -18,7 +20,7 @@ Crafty.c("PlayerControls", {
         this.isLanding = false;
         this.y = this.preJumpY;
         this.stop();
-        this.animate('Land', 2, 1);
+        this.isCrouching = true;
         this.yV = 0;
         this.preJumpY = false;
         return;
@@ -72,6 +74,9 @@ Crafty.c("PlayerControls", {
     if(this.isDown(40)){
       return this.y+=this.walkSpeed;
     }
+
+    this.dashLeft = 0;
+    this.dashRight = 0;
   },
 
   keyHandler: function(){
@@ -91,6 +96,25 @@ Crafty.c("PlayerControls", {
     if(this.isDown(32)){
         this.startJump();
     }
+
+    //Left
+    if(this.isDown(37)){
+      this.dashLeft += 1;
+      if(this.dashLeft === 2){
+        console.log("Dashing left!");
+        this.dashLeft = 0;
+      }
+    }
+
+    //Right
+    if(this.isDown(39)){
+      this.dashRight += 1;
+      if(this.dashRight === 2){
+        console.log("Dashing Right!");
+        this.dashRight = 0;
+      }
+    }
+
   },
 
   startJump: function(){

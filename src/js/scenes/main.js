@@ -34,68 +34,15 @@ Crafty.scene("main",(function() {
         .addComponent('user_'+snapshot.name());
         player.remote = remoteUser;
 
-        var player_name = Crafty.e('2D, DOM, Text, PlayerName')
-                                .textColor("#000000")
-                                .textFont({size: "1px"})
-                                .attr({
-                                  x: player.x,
-                                  y: (player.y+player.h) + 2,
-                                  w: player.w*2
-                                });
-        player.attach(player_name);
 
         //if its the local player publish events to remote
         if(snapshot.name() == Crafty.player_id){
-          player.addComponent('PlayerControls');
+          player.addComponent('PlayerControls, LocalPlayer');
           player.email = Crafty.player_email;
-          player_name.text(player.email.match(/([_a-z0-9-]+(.[_a-z0-9-]+)*)@/)[1]);
-
-          // update remote animation states on every frame
-          player.bind('EnterFrame', function(){
-            remoteUser.set({
-              x: this.x,
-              y: this.y,
-              email: Crafty.player_email,
-              isPunching: this.isPunching,
-              isKicking: this.isKicking,
-              isJumping: this.isJumping,
-              isLanding: this.isLanding,
-              isFrontDamageing: this.isFrontDamageing,
-              isBackDamageing: this.isBackDamageing,
-              isRecovering: this.isRecovering,
-              loggedin: true,
-              preJumpY: this.preJumpY,
-              stats: this.stats
-            });
-          });
+          player.player_name.text(player.email.match(/([_a-z0-9-]+(.[_a-z0-9-]+)*)@/)[1]);
 
         }else{// its a remote user just listen and update locally
-          remoteUser.on('value', function(snapshot){
-            var state = snapshot.val();
-            // only update x and y if they changed remotely
-            // otherwise we will constantly trigger the users 'moved' handler
-            // causing unexpected behavior
-            if(state.x != player.x){
-              player.x = state.x;
-            }
-
-            if(state.y != player.y){
-              player.y = state.y;
-            }
-
-            var state = snapshot.val();
-            player.isPunching = state.isPunching;
-            player.isKicking = state.isKicking;
-            player.isJumping = state.isJumping;
-            player.isLanding = state.isLanding;
-            player.isFrontDamageing = state.isFrontDamageing;
-            player.isBackDamageing = state.isBackDamageing;
-            player.isRecovering = state.isRecovering;
-            player.preJumpy = state.preJumpy;
-            player.email = state.email;
-            player.stats = state.stats;
-            player_name.text(player.email.match(/([_a-z0-9-]+(.[_a-z0-9-]+)*)@/)[1]);
-          });
+          player.addComponent('RemotePlayer');
         }
       }
     },
