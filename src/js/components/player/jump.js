@@ -21,9 +21,9 @@ Crafty.c("Jump", {
         this.isJumping = false;
         if(this.isFrontKOing || this.isBackKOing){
           console.log("OMG LETS DOWN");
-          this.isDowning = true;
           this.isFrontKOing = false;
           this.isBackKOing = false;
+          this.isDowning = true;
         }else{
           this.isCrouching = true;
         }

@@ -1,5 +1,5 @@
 Crafty.c("PlayerControls", {
-  walkSpeed: 1,
+  xV:0,
 
   init: function() {
     this.requires("Keyboard")
@@ -8,34 +8,45 @@ Crafty.c("PlayerControls", {
   },
 
   enterFrameHandler:function(){
+    if((this.x + this.w/2) + this.xV <= 0){
+      return;
+    }
+
+    if((this.x + this.w/2) + this.xV >= Crafty.viewport.width){
+      return;
+    }
+
+    this.x += this.xV;
+
     //Left
     if(this.isDown(37)){
-      if((this.x + this.w/2) <= 0){
-        return this.animate('Walking', 50, 1);
-      }
-      return this.x-=this.walkSpeed;
+      this.isWalking = true;
+      this.xV = -1;
+      return;
     }
 
     //Right
     if(this.isDown(39)){
-      if((this.x + this.w/2) >= Crafty.viewport.width){
-        return this.animate('Walking', 50, 1);
-      }
-      return this.x+=this.walkSpeed;
+      this.isWalking = true;
+      this.xV = 1;
+      return;
     }
 
     //Up
     if(this.isDown(38)){
-      return this.y-=this.walkSpeed;
+      this.isWalking = true;
+      return this.y-=this.xV;
     }
 
     //Down
     if(this.isDown(40)){
-      return this.y+=this.walkSpeed;
+      this.isWalking = true;
+      return this.y+=this.xV;
     }
 
-    this.dashLeft = 0;
-    this.dashRight = 0;
+    this.xV = 0;
+    this.isWalking = false;
+    this.isStanding = true;
   },
 
   keyHandler: function(){
@@ -53,7 +64,6 @@ Crafty.c("PlayerControls", {
     }
 
     if(this.isDown(32)){
-        //Trigger animation
         this.isJumping = true;
         this.startJump();
     }

@@ -10,6 +10,7 @@ Crafty.c("Player", {
   isBackKOing: false,
   isFrontKOing: false,
   isRecovering: false,
+  isWalking: false,
   isDowning: false,
 
   init: function(){
@@ -35,8 +36,8 @@ Crafty.c("Player", {
   * reverse ordered for priority
   */
   this.animation_map = [
-    ["Standing",0,0,0],
-    ["Walking",2,0,0],
+    ["Stand",0,0,0],
+    ["Walk",2,0,0],
     ["FinKick",3,2,3],
     ["FinPunch",6,1,8],
     ['Crouch',6,0,6],
@@ -59,9 +60,9 @@ Crafty.c("Player", {
    this.bindHitBoxes();
    this.registerAnimations();
    this.bind("Move", $.proxy(this.changeDirection, this));
-   this.bind("Move", $.proxy(this.movingAnimation, this));
+   //this.bind("Move", $.proxy(this.movingAnimation, this));
    this.bind('EnterFrame', $.proxy(this.enterFrameHandler, this));
-   this.animate("Standing",1,1).stop();
+   this.animate("Stand",1,1).stop();
 
 
    this.player_name = Crafty.e('2D, DOM, Text, PlayerName')
@@ -120,13 +121,13 @@ Crafty.c("Player", {
   this.attach(this.kickbox);
  },
 
- movingAnimation: function(old_pos){
-  if(!this.isPlaying('Walking') &&
-     !this.isRising &&
-          !this.isFalling){
-    this.animate('Walking',50, 1);
-  }
-},
+//  movingAnimation: function(old_pos){
+//   if(!this.isPlaying('Walking') &&
+//      !this.isRising &&
+//           !this.isFalling){
+//     this.animate('Walking',50, 1);
+//   }
+// },
 
   changeDirection: function(old_pos){
     if(this._x > old_pos._x){
@@ -173,13 +174,18 @@ Crafty.c("Player", {
       }
     }
 
-    if(this._currentReelId !== 'Standing' ){
-      this.stop().animate("Standing",1,-1);
-    }
+    // if(this._currentReelId !== 'Standing' ){
+    //   this.stop().animate("Standing",1,-1);
+    // }
   },
 
   jump: function(){
-    return this.animate('Jump', 5, -1);
+    return this.animate('Jump', 1, -1);
+  },
+
+  stand: function(){
+    this.stop();
+    return this.animate('Stand', 1, -1);
   },
 
   down: function(){
@@ -208,6 +214,10 @@ Crafty.c("Player", {
           this.isKicking = false;
         });
     return;
+  },
+
+  walk: function(){
+    this.animate('Walk',15, 0);
   },
 
   punch: function(){
