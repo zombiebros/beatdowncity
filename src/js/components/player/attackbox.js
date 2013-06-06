@@ -41,7 +41,14 @@ Crafty.c("AttackBox", {
       if(typeof this._parent._frame != 'undefined' &&  //For some reason frame isn't gauranteed? wtf
          this._parent.isPlaying(this.hitAnimation) &&
          this._parent._frame.currentSlideNumber == this.hitFrame){
-        player.applyDamage(this._parent.stats[this.hitAnimation.toLowerCase()][0], side);
+
+        if(player.isRecovering){
+          //knockout
+          console.log("attack box triggering a ko");
+          player[side.toLowerCase()+'ko']();
+        }else{
+          player.applyDamage(this._parent.stats[this.hitAnimation.toLowerCase()][0], side);
+        }
       }
     }
   },

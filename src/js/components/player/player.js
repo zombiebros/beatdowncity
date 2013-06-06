@@ -73,6 +73,7 @@ Crafty.c("Player", {
                             w: this.w*2
                            });
    this.attach(this.player_name);
+   this.addComponent('Jump');
  },
 
  /*
@@ -177,21 +178,21 @@ Crafty.c("Player", {
     }
   },
 
-  jump:function(){
+  jump: function(){
     return this.animate('Jump', 5, -1);
   },
 
-  down:function(){
-    this.animate('Down', 40, 1).bind('AnimationEnd', function(){
+  down: function(){
+    this.animate('Down', 100, 1).bind('AnimationEnd', function(){
       this.isDowning = false;
       this.isRecovering = true;
     });
     return;
   },
 
-  land:function(){}, //noop
+  land: function(){}, //noop
 
-  crouch:function(){
+  crouch: function(){
     this.isJumping = false;
     this.stop();
     this.animate('Crouch',1,1).bind('AnimationEnd', function(){
@@ -221,7 +222,9 @@ Crafty.c("Player", {
   //Apply damage amount and trigger animation
   applyDamage:function(amount, side){
     if(this.isBackDamageing === true ||
-       this.isFrontDamageing === true){
+       this.isFrontDamageing === true ||
+       this.isFrontKOing === true ||
+       this.isBackKOing === true){
       return false;
     }
     console.log("Applying Damage", this.stats);
@@ -253,9 +256,19 @@ Crafty.c("Player", {
   },
 
   ko:function(side){
+    if(this.isBackDamageing === true ||
+       this.isFrontDamageing === true ||
+       this.isFrontKOing === true ||
+       this.isBackKOing === true ||
+       this.isDowning === true){
+      return false;
+    }
+
     var _self = this;
     side = (typeof side === 'undefined') ? 'Front' : side;
+    this['is'+side+"KOing"] = true;
     this.animate(side+"KO", 1,-1);
+    this.startJump(30);
   },
 
   // Play damage animation
