@@ -183,7 +183,7 @@ Crafty.c("Player", {
   },
 
   down: function(){
-    this.animate('Down', 100, 1).bind('AnimationEnd', function(){
+    this.animate('Down', 50, 1).bind('AnimationEnd', function(){
       this.isDowning = false;
       this.isRecovering = true;
     });
