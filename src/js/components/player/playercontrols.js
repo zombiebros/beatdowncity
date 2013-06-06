@@ -7,6 +7,8 @@ Crafty.c("PlayerControls", {
   jumpV: 4,
   dashLeft: 0,
   dashRight: 0,
+  isRising: false,
+  isFalling: false,
 
   init: function() {
     this.requires("Keyboard")
@@ -15,12 +17,21 @@ Crafty.c("PlayerControls", {
   },
 
   enterFrameHandler:function(){
-    if(this.isLanding === true){
+    if(this.isFalling === true){
       if((this.y + this.yV) >= this.preJumpY){
-        this.isLanding = false;
+        this.isFalling = false;
         this.y = this.preJumpY;
         this.stop();
-        this.isCrouching = true;
+        //Triggers animation
+        this.isJumping = false;
+        if(this.isFrontKOing || this.isBackKOing){
+          this.isFrontKOing = false;
+          this.isBackKOing = false;
+          this.isDowning = true;
+        }else{
+          this.isCrouching = true;
+        }
+
         this.yV = 0;
         this.preJumpY = false;
         return;
@@ -31,11 +42,12 @@ Crafty.c("PlayerControls", {
         return;
     }
 
-    if(this.isJumping === true){
-      if((this.y - this.yV) <= (this.preJumpY - this.jumpHeight)){
+    if(this.isRising === true){
+      if(this.yV < 0 || // inverse velocity we are falling
+         ((this.y - this.yV) <= (this.preJumpY - this.jumpHeight))){
         this.yV = 0;
-        this.isJumping = false;
-        this.isLanding = true;
+        this.isRising = false;
+        this.isFalling = true;
         return;
       }
 
@@ -94,6 +106,8 @@ Crafty.c("PlayerControls", {
     }
 
     if(this.isDown(32)){
+        //Trigger animation
+        this.isJumping = true;
         this.startJump();
     }
 
@@ -117,10 +131,16 @@ Crafty.c("PlayerControls", {
 
   },
 
-  startJump: function(){
-    if(this.isJumping === true ||
-       this.isLanding === true){
+  startJump: function(jumpHeight){
+    if(this.isRising === true ||
+       this.isFalling === true){
       return false;
+    }
+
+    if(typeof jumpHeight != 'undefined'){
+      this.jumpHeight = jumpHeight;
+    }else{
+      this.jumpHeight = 40;
     }
 
     if(!this.preJumpY){
@@ -131,7 +151,7 @@ Crafty.c("PlayerControls", {
       this.yV = this.jumpV;
     }
 
-    this.isJumping = true;
+    this.isRising = true;
   }
 
 });

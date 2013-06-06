@@ -7,7 +7,10 @@ Crafty.c("Player", {
   isCrouching: false,
   isFrontDamageing: false,
   isBackDamageing: false,
+  isBackKOing: false,
+  isFrontKOing: false,
   isRecovering: false,
+  isDowning: false,
 
   init: function(){
   /*
@@ -36,12 +39,14 @@ Crafty.c("Player", {
     ["Walking",2,0,0],
     ["FinKick",3,2,3],
     ["FinPunch",6,1,8],
-    ['Jump',5,0,5],
-    ['Land',6,0,6],
     ['Crouch',6,0,6],
+    ['Land',6,0,6],
+    ['Jump',5,0,5],
     ["Punch",0,1,2],
     ["Kick",0,2,2],
     ['Recover',1,4,1],
+    ['FrontKO',3,4,3],
+    ['BackKO', 4,4,4],
     ['BackDamage',0,4,0],
     ['FrontDamage',2,4,2],
     ['Down',7,4,7]
@@ -116,7 +121,8 @@ Crafty.c("Player", {
 
  movingAnimation: function(old_pos){
   if(!this.isPlaying('Walking') &&
-     (!this.isJumping && !this.isLanding)){
+     !this.isRising &&
+          !this.isFalling){
     this.animate('Walking',50, 1);
   }
 },
@@ -175,9 +181,19 @@ Crafty.c("Player", {
     return this.animate('Jump', 5, -1);
   },
 
+  down:function(){
+    this.animate('Down', 40, 1).bind('AnimationEnd', function(){
+      this.isDowning = false;
+      this.isRecovering = true;
+    });
+    return;
+  },
+
   land:function(){}, //noop
 
   crouch:function(){
+    this.isJumping = false;
+    this.stop();
     this.animate('Crouch',1,1).bind('AnimationEnd', function(){
       this.isCrouching = false;
     });
@@ -226,6 +242,20 @@ Crafty.c("Player", {
 
   backdamage: function(){
     this.damage('Back');
+  },
+
+  frontko: function(){
+    this.ko('Front');
+  },
+
+  backko:function(){
+    this.ko('Back');
+  },
+
+  ko:function(side){
+    var _self = this;
+    side = (typeof side === 'undefined') ? 'Front' : side;
+    this.animate(side+"KO", 1,-1);
   },
 
   // Play damage animation
