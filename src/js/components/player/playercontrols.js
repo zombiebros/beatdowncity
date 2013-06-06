@@ -13,11 +13,6 @@ Crafty.c("PlayerControls", {
   },
 
   enterFrameHandler:function(){
-    if(this.isPlaying('Punch') ||
-     this.isPlaying('Kick')){
-     return false;
-    }
-
     if(this.isLanding === true){
       if((this.y + this.yV) >= this.preJumpY){
         this.isLanding = false;
@@ -47,13 +42,24 @@ Crafty.c("PlayerControls", {
       return;
     }
 
+    if(this.isPlaying('Punch') ||
+     this.isPlaying('Kick')){
+     return false;
+    }
+
     //Left
     if(this.isDown(37)){
+      if((this.x + this.w/2) <= 0){
+        return this.animate('Walking', 50, 1);
+      }
       return this.x-=this.walkSpeed;
     }
 
     //Right
     if(this.isDown(39)){
+      if((this.x + this.w/2) >= Crafty.viewport.width){
+        return this.animate('Walking', 50, 1);
+      }
       return this.x+=this.walkSpeed;
     }
 
@@ -70,8 +76,7 @@ Crafty.c("PlayerControls", {
 
   keyHandler: function(){
     if(this.isPlaying('Punch') ||
-       this.isPlaying('Kick') ||
-       this.isPlaying('Jump')){
+       this.isPlaying('Kick')){
       return false;
     }
 

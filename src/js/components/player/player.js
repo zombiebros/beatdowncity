@@ -4,9 +4,9 @@ Crafty.c("Player", {
   isRunning: false,
   isJumping: false,
   isLanding: false,
-  isFrontDamage: false,
-  isBackDamage: false,
-  isRecover: false,
+  isFrontDamageing: false,
+  isBackDamageing: false,
+  isRecovering: false,
 
   init: function(){
   /*
@@ -33,12 +33,12 @@ Crafty.c("Player", {
   this.animation_map = [
     ["Standing",0,0,0],
     ["Walking",2,0,0],
-    ["Punch",0,1,2],
-    ["Kick",0,2,2],
     ["FinKick",3,2,3],
     ["FinPunch",6,1,8],
     ['Jump',5,0,5],
     ['Land',6,0,6],
+    ["Punch",0,1,2],
+    ["Kick",0,2,2],
     ['Recover',1,4,1],
     ['BackDamage',0,4,0],
     ['FrontDamage',2,4,2],
@@ -54,7 +54,6 @@ Crafty.c("Player", {
    this.bind("Move", $.proxy(this.changeDirection, this));
    this.bind("Move", $.proxy(this.movingAnimation, this));
    this.bind('EnterFrame', $.proxy(this.enterFrameHandler, this));
-   //this.bind("Change", $.proxy(this.animationChange, this));
    this.animate("Standing",1,1).stop();
  },
 
@@ -105,7 +104,6 @@ Crafty.c("Player", {
  movingAnimation: function(old_pos){
   if(!this.isPlaying('Walking') &&
      (!this.isJumping && !this.isLanding)){
-    console.log("walkin");
     this.animate('Walking',50, 1);
   }
 },
@@ -133,86 +131,26 @@ Crafty.c("Player", {
   },
 
   enterFrameHandler: function(frameNum){
-    // var ani = this.animation_map.length;
-    // for(var i=ani; i--;){
-    //   if(this.animation_map[i][0] === 'Standing'){
-    //     continue;
-    //   // If theres an animation playing do return
-    //   }else if(this.isPlaying(this.animation_map[i][0])){
-    //     return false;
-    //   // If the user stat is set and the animations not playing,
-    //   // call the method to play it
-    //   }else if(this['is'+this.animation_map[i][0]] === true &&
-    //            !this.isPlaying(this.animation_map[i][0])){
-    //     return this[this.animation_map[i][0].toLowerCase()];
-    //   }
-    // }
+    var ani = this.animation_map.length,
+        curani;
+    for(var i=ani; i--;){ //revers iterate over the animation map
+      curani = this.animation_map[i][0];
 
-    if(this.isPlaying('Punch') ||
-       this.isPlaying('Kick') ||
-       this.isPlaying('Jump') ||
-       this.isPlaying('Land') ||
-       this.isPlaying('FinPunch') ||
-       this.isPlaying('FinKick') ||
-       this.isPlaying('FrontDamage') ||
-       this.isPlaying('BackDamage') ||
-       this.isPlaying('Recover')){
-      return false;
-    }
+      if(curani === 'Standing'){
+        continue;
+      }
 
-    if(this.isRecover === true && !this.isPlaying('Recover')){
-      return this.recover();
-    }
+      // If theres an animation playing do return
+      if(this.isPlaying(curani)){
+        return false;
+      }
 
-    if(this.isFrontDamage === true && !this.isPlaying('FrontDamage')){
-      return this.frontdamage();
-    }
-
-    if(this.isBackDamage === true && !this.isPlaying('BackDamage')){
-      return this.backdamage();
-    }
-
-    if(this.isJumping && !this.isPlaying('Jump')){
-        return this.animate('Jump', 5, -1);
-    }
-
-    // if(this.isLanding === true && !this.isPlaying('Land')){
-    //    return this.animate('Land', 2, 1);
-    // }
-
-    // if(this.isJumping && !this.isPlaying('Jump')){
-    //     console.log("should play jump animation");
-    //     return this.animate('Jump',1,-1);
-    //     // if((this.y - this.jumpSpeed) <= (this.preJumpY - this.jumpHeight)){
-    //     //   this.isJumping = false;
-    //     //   this.isLanding = true;
-    //     // }
-    //     // return this.y-= this.jumpSpeed;
-    // }
-
-    // if(this.isLanding === true && !this.isPlaying('Land')){
-    //   return this.animate('Land', 2, -1);
-    // //   if((this.y + this.jumpSpeed) >= this.preJumpY){
-    // //     this.animate('Land', 2, -1);
-    // //     this.isLanding = false;
-    // //     this.y = this.preJumpY;
-    // //     this.preJumpY = false;
-    // //     return;
-    // //   }else{
-    // //     return this.y+= this.jumpSpeed;
-    // //   }
-    // }
-
-    if(this.isPunching === true && !this.isPlaying('Punch')){
-      return this.punch();
-    }
-
-    if(this.isKicking === true && !this.isPlaying('Punch')){
-      return this.kick();
-    }
-
-    if(this.isPlaying('Walking')){
-      return;
+      // If the user state is set and the animations not playing,
+      // call the method to play it
+      if(this['is'+curani+'ing'] === true &&
+               !this.isPlaying(curani)){
+        return this[curani.toLowerCase()]();
+      }
     }
 
     if(this._currentReelId !== 'Standing' ){
@@ -220,6 +158,11 @@ Crafty.c("Player", {
     }
   },
 
+  jump:function(){
+    return this.animate('Jump', 5, -1);
+  },
+
+  land:function(){}, //noop
 
   kick: function(){
     this.stop();

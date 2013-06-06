@@ -60,9 +60,9 @@ Crafty.scene("main",(function() {
               isKicking: this.isKicking,
               isJumping: this.isJumping,
               isLanding: this.isLanding,
-              isFrontDamage: this.isFrontDamage,
-              isBackDamage: this.isBackDamage,
-              isRecover: this.isRecover,
+              isFrontDamageing: this.isFrontDamageing,
+              isBackDamageing: this.isBackDamageing,
+              isRecovering: this.isRecovering,
               loggedin: true,
               preJumpY: this.preJumpY,
               stats: this.stats
@@ -88,9 +88,9 @@ Crafty.scene("main",(function() {
             player.isKicking = state.isKicking;
             player.isJumping = state.isJumping;
             player.isLanding = state.isLanding;
-            player.isFrontDamage = state.isFrontDamage;
-            player.isBackDamage = state.isBackDamage;
-            player.isRecover = state.isRecover;
+            player.isFrontDamageing = state.isFrontDamageing;
+            player.isBackDamageing = state.isBackDamageing;
+            player.isRecovering = state.isRecovering;
             player.preJumpy = state.preJumpy;
             player.email = state.email;
             player.stats = state.stats;
