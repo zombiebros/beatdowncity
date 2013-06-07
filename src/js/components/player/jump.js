@@ -1,5 +1,5 @@
 Crafty.c("Jump", {
-  gravity: 0.2,
+  gravity: 0.1,
   jumpHeight: 40,
   preJumpY: null,
   jumpV: -4,
@@ -16,16 +16,16 @@ Crafty.c("Jump", {
       if((this.y + this.yV) >= this.preJumpY){
         this.isFalling = false;
         this.y = this.preJumpY;
-        this.stop();
         //Triggers animation
         this.isJumping = false;
+        this.stop();
         this.yV = 0;
         if(this.isFrontKOing || this.isBackKOing){
-          console.log("OMG LETS DOWN");
           this.isFrontKOing = false;
           this.isBackKOing = false;
           this.isDowning = true;
         }else{
+          console.log("is crouching ");
           this.isCrouching = true;
         }
 
@@ -58,7 +58,7 @@ Crafty.c("Jump", {
     }
   },
 
-  startJump: function(jumpHeight){
+  startJump: function(jumpHeight, xV){
     if(this.isRising === true ||
        this.isFalling === true){
       return false;
@@ -80,5 +80,9 @@ Crafty.c("Jump", {
     }
 
     this.isRising = true;
+
+    if(typeof xV != 'undefined'){
+      this.xV = xV;
+    }
   }
 });

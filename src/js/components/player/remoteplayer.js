@@ -20,7 +20,8 @@ Crafty.c("RemotePlayer", {
     this.isPunching = state.isPunching;
     this.isKicking = state.isKicking;
     this.isJumping = state.isJumping;
-    this.isLanding = state.isLanding;
+    this.isWalking = state.isWalking;
+    this.isStanding = state.isStanding;
     this.isCrouching = state.isCrouching;
     this.isFrontDamageing = state.isFrontDamageing;
     this.isBackDamageing = state.isBackDamageing;

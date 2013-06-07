@@ -28,7 +28,7 @@ Crafty.c("PlayerControls", {
 
     //Left
     if(this.isDown(37)){
-      if(this.isRising || this.isFalling){
+      if(this.isRising || this.isFalling){ // Can only flip once in air
         this.flip('X');
       }else{
         this.isWalking = true;
@@ -38,7 +38,7 @@ Crafty.c("PlayerControls", {
 
     //Right
     if(this.isDown(39)){
-      if(this.isRising || this.isFalling){
+      if(this.isRising || this.isFalling){ // Can only flip once in air
         this.unflip('X');
       }else{
         this.isWalking = true;
@@ -58,15 +58,18 @@ Crafty.c("PlayerControls", {
       this.yV = 1;
     }
 
+    // Not moving on the x reset it
     if(!this.isDown(37) && !this.isDown(39)){
       this.xV = 0;
     }
 
+    // Not moving on the y reset it
     if(!this.isDown(38) && !this.isDown(40) &&
       !this.isRising && !this.isFalling){
       this.yV = 0;
     }
 
+    // Not moving any direction reset animations
     if(!this.isDown(37) && !this.isDown(39) &&
       !this.isDown(38) && !this.isDown(40)){
         this.isWalking = false;

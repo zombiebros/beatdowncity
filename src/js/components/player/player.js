@@ -3,7 +3,7 @@ Crafty.c("Player", {
   isKicking: false,
   isRunning: false,
   isJumping: false,
-  isLanding: false,
+  isStanding: false,
   isCrouching: false,
   isFrontDamageing: false,
   isBackDamageing: false,
@@ -41,7 +41,6 @@ Crafty.c("Player", {
     ["FinKick",3,2,3],
     ["FinPunch",6,1,8],
     ['Crouch',6,0,6],
-    ['Land',6,0,6],
     ['Jump',5,0,5],
     ["Punch",0,1,2],
     ["Kick",0,2,2],
@@ -174,18 +173,15 @@ Crafty.c("Player", {
       }
     }
 
-    // if(this._currentReelId !== 'Standing' ){
-    //   this.stop().animate("Standing",1,-1);
-    // }
   },
 
   jump: function(){
-    return this.animate('Jump', 1, -1);
+    return this.animate('Jump', 1, 1);
   },
 
   stand: function(){
     this.stop();
-    return this.animate('Stand', 1, -1);
+    return this.animate('Stand', 1, 1);
   },
 
   down: function(){
@@ -196,9 +192,8 @@ Crafty.c("Player", {
     return;
   },
 
-  land: function(){}, //noop
-
   crouch: function(){
+    console.log("crouch()");
     this.isJumping = false;
     this.stop();
     this.animate('Crouch',1,1).bind('AnimationEnd', function(){
@@ -261,11 +256,11 @@ Crafty.c("Player", {
     this.ko('Front');
   },
 
-  backko:function(){
+  backko: function(){
     this.ko('Back');
   },
 
-  ko:function(side){
+  ko: function(side){
     if(this.isBackDamageing === true ||
        this.isFrontDamageing === true ||
        this.isFrontKOing === true ||
@@ -278,7 +273,7 @@ Crafty.c("Player", {
     side = (typeof side === 'undefined') ? 'Front' : side;
     this['is'+side+"KOing"] = true;
     this.animate(side+"KO", 1,-1);
-    this.startJump(30);
+    this.startJump(30, -3);
   },
 
   // Play damage animation
