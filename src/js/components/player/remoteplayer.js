@@ -17,6 +17,7 @@ Crafty.c("RemotePlayer", {
       this.y = state.y;
     }
 
+    this.dir = state.dir;
     this.isPunching = state.isPunching;
     this.isKicking = state.isKicking;
     this.isJumping = state.isJumping;

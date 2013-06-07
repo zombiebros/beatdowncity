@@ -17,6 +17,9 @@ Crafty.c("Player", {
   xV:0,
   yV:0,
 
+  // Direction
+  dir:1,
+
   init: function(){
   /*
   * Player Game Stats
@@ -62,7 +65,7 @@ Crafty.c("Player", {
    this.collision([10,7], [10,40], [30,40], [30,7]);
    this.bindHitBoxes();
    this.registerAnimations();
-   this.bind("Move", $.proxy(this.changeDirection, this));
+   //this.bind("Move", $.proxy(this.changeDirection, this));
    //this.bind("Move", $.proxy(this.movingAnimation, this));
    this.bind('EnterFrame', $.proxy(this.enterFrameHandler, this));
    this.animate("Stand",1,1).stop();
@@ -77,7 +80,7 @@ Crafty.c("Player", {
                             w: this.w*2
                            });
    this.attach(this.player_name);
-   this.addComponent('Jump');
+   this.addComponent('Movement, Jump');
  },
 
  /*
@@ -125,29 +128,30 @@ Crafty.c("Player", {
  },
 
 
-  changeDirection: function(old_pos){
-    if(this._x > old_pos._x){
-        this.unflip("X");
-        try{
-          this.punchbox.unmirror();
-          this.kickbox.unmirror();
-        }catch(ex){
-          console.log("Exception:", ex.message);
-          console.log("Couldn't update hitboxes haven't rendered yet");
-        }
-    }else if(this._x < old_pos._x){
-        this.flip("X");
-        try{
-          this.punchbox.mirror();
-          this.kickbox.mirror();
-        }catch(ex){
-          console.log("Exception:", ex.message);
-          console.log("Couldn't update hitboxes haven't rendered yet");
-        }
-    }
-  },
+  // changeDirection: function(old_pos){
+  //   if(this._x > old_pos._x){
+  //       this.unflip("X");
+  //       try{
+  //         this.punchbox.unmirror();
+  //         this.kickbox.unmirror();
+  //       }catch(ex){
+  //         console.log("Exception:", ex.message);
+  //         console.log("Couldn't update hitboxes haven't rendered yet");
+  //       }
+  //   }else if(this._x < old_pos._x){
+  //       this.flip("X");
+  //       try{
+  //         this.punchbox.mirror();
+  //         this.kickbox.mirror();
+  //       }catch(ex){
+  //         console.log("Exception:", ex.message);
+  //         console.log("Couldn't update hitboxes haven't rendered yet");
+  //       }
+  //   }
+  // },
 
   enterFrameHandler: function(frameNum){
+
     var ani = this.animation_map.length,
         curani;
     for(var i=ani; i--;){ //revers iterate over the animation map

@@ -8,6 +8,7 @@ Crafty.c("LocalPlayer",{
       this.remote.set({
         x: this.x,
         y: this.y,
+        dir: this.dir,
         email: Crafty.player_email,
         isPunching: this.isPunching,
         isKicking: this.isKicking,

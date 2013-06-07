@@ -9,39 +9,23 @@ Crafty.c("PlayerControls", {
   },
 
   enterFrameHandler:function(){
-    if((this.isPunching || this.isKicking) &&
-     (!this.isRising && !this.isFalling)){
-      return;
-    }
-    if((this.x + this.w/2) + this.xV <= 0){
-      return;
-    }
-
-    if((this.x + this.w/2) + this.xV >= Crafty.viewport.width){
-      return;
-    }
-
-    this.x += this.xV;
-    this.y += this.yV;
 
     //Left
     if(this.isDown(37)){
-      if(this.isRising || this.isFalling){ // Can only flip once in air
-        this.flip('X');
-      }else{
+      if(!this.isRising && !this.isFalling){ // Can only flip once in air
         this.isWalking = true;
         this.xV = -1;
       }
+      this.dir = -1;
     }
 
     //Right
     if(this.isDown(39)){
-      if(this.isRising || this.isFalling){ // Can only flip once in air
-        this.unflip('X');
-      }else{
+      if(!this.isRising && !this.isFalling){ // Can only flip once in air
         this.isWalking = true;
         this.xV = 1;
       }
+      this.dir = 1;
     }
 
     //Up
@@ -57,7 +41,7 @@ Crafty.c("PlayerControls", {
     }
 
     // Not moving on the x reset it
-    if(!this.isDown(37) && !this.isDown(39)){
+    if(!this.isDown(37) && !this.isDown(39) && !this.isRising && !this.isFalling){
       this.xV = 0;
     }
 
