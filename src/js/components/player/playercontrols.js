@@ -11,7 +11,7 @@ Crafty.c("PlayerControls", {
   },
 
   enterFrameHandler:function(){
-    if(this.isPunching || this.isKicking &&
+    if((this.isPunching || this.isKicking) &&
      (!this.isRising && !this.isFalling)){
       return;
     }
