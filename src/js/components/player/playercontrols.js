@@ -1,6 +1,4 @@
 Crafty.c("PlayerControls", {
-  xV:0,
-  yV:0,
   dashLeft:0,
   dashRight:0,
 

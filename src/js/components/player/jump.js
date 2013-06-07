@@ -40,14 +40,15 @@ Crafty.c("Jump", {
     }
 
     if(this.isRising === true){
+      console.log("Rising", this.yV);
       if(((this.y + this.yV) <= (this.preJumpY - this.jumpHeight))){
+        console.log("Peaked");
         this.yV = 0;
         this.isRising = false;
         this.isFalling = true;
         return;
       }
 
-      //this.y -= this.yV;
       this.yV -= this.gravity;
       return;
     }
@@ -59,6 +60,7 @@ Crafty.c("Jump", {
   },
 
   startJump: function(jumpHeight, xV){
+    console.log("start jump", this.isRising, this.isFalling);
     if(this.isRising === true ||
        this.isFalling === true){
       return false;

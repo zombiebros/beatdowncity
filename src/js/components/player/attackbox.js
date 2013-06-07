@@ -44,7 +44,6 @@ Crafty.c("AttackBox", {
 
         if(player.isRecovering){
           //knockout
-          console.log("attack box triggering a ko");
           player[side.toLowerCase()+'ko']();
         }else{
           player.applyDamage(this._parent.stats[this.hitAnimation.toLowerCase()][0], side);

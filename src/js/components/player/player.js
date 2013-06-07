@@ -13,6 +13,10 @@ Crafty.c("Player", {
   isWalking: false,
   isDowning: false,
 
+  // Velocity
+  xV:0,
+  yV:0,
+
   init: function(){
   /*
   * Player Game Stats
@@ -120,13 +124,6 @@ Crafty.c("Player", {
   this.attach(this.kickbox);
  },
 
-//  movingAnimation: function(old_pos){
-//   if(!this.isPlaying('Walking') &&
-//      !this.isRising &&
-//           !this.isFalling){
-//     this.animate('Walking',50, 1);
-//   }
-// },
 
   changeDirection: function(old_pos){
     if(this._x > old_pos._x){
@@ -176,12 +173,12 @@ Crafty.c("Player", {
   },
 
   jump: function(){
-    return this.animate('Jump', 1, 1);
+    return this.animate('Jump', 1, 0);
   },
 
   stand: function(){
     this.stop();
-    return this.animate('Stand', 1, 1);
+    return this.animate('Stand', 1, 0);
   },
 
   down: function(){
@@ -193,7 +190,6 @@ Crafty.c("Player", {
   },
 
   crouch: function(){
-    console.log("crouch()");
     this.isJumping = false;
     this.stop();
     this.animate('Crouch',1,1).bind('AnimationEnd', function(){
@@ -272,7 +268,7 @@ Crafty.c("Player", {
     var _self = this;
     side = (typeof side === 'undefined') ? 'Front' : side;
     this['is'+side+"KOing"] = true;
-    this.animate(side+"KO", 1,-1);
+    this.animate(side+"KO", 1, -1);
     this.startJump(30, -3);
   },
 
