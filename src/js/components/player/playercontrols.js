@@ -11,6 +11,10 @@ Crafty.c("PlayerControls", {
   },
 
   enterFrameHandler:function(){
+    if(this.isPunching || this.isKicking &&
+     (!this.isRising && !this.isFalling)){
+      return;
+    }
     if((this.x + this.w/2) + this.xV <= 0){
       return;
     }
@@ -24,20 +28,26 @@ Crafty.c("PlayerControls", {
 
     //Left
     if(this.isDown(37)){
-      this.isWalking = true;
-      this.xV = -1;
+      if(this.isRising || this.isFalling){
+        this.flip('X');
+      }else{
+        this.isWalking = true;
+        this.xV = -1;
+      }
     }
 
     //Right
     if(this.isDown(39)){
-      this.isWalking = true;
-      this.xV = 1;
+      if(this.isRising || this.isFalling){
+        this.unflip('X');
+      }else{
+        this.isWalking = true;
+        this.xV = 1;
+      }
     }
 
     //Up
-    if(this.isDown(38) &&
-       this.isRising !== true &&
-       this.isFalling !== true){
+    if(this.isDown(38) && !this.isRising && !this.isFalling){
       this.isWalking = true;
       this.yV = -1;
     }
