@@ -1,9 +1,8 @@
 Crafty.c("Jump", {
-  yV: 0,
   gravity: 0.2,
   jumpHeight: 40,
   preJumpY: null,
-  jumpV: 4,
+  jumpV: -4,
   isRising: false,
   isFalling: false,
 
@@ -12,6 +11,7 @@ Crafty.c("Jump", {
   },
 
   enterFrameHandler: function(){
+
     if(this.isFalling === true){
       if((this.y + this.yV) >= this.preJumpY){
         this.isFalling = false;
@@ -19,6 +19,7 @@ Crafty.c("Jump", {
         this.stop();
         //Triggers animation
         this.isJumping = false;
+        this.yV = 0;
         if(this.isFrontKOing || this.isBackKOing){
           console.log("OMG LETS DOWN");
           this.isFrontKOing = false;
@@ -33,21 +34,20 @@ Crafty.c("Jump", {
         return;
       }
 
-        this.y += this.yV;
+        //this.y += this.yV;
         this.yV += this.gravity;
         return;
     }
 
     if(this.isRising === true){
-      if(this.yV < 0 || // inverse velocity we are falling
-         ((this.y - this.yV) <= (this.preJumpY - this.jumpHeight))){
+      if(((this.y + this.yV) <= (this.preJumpY - this.jumpHeight))){
         this.yV = 0;
         this.isRising = false;
         this.isFalling = true;
         return;
       }
 
-      this.y -= this.yV;
+      //this.y -= this.yV;
       this.yV -= this.gravity;
       return;
     }
@@ -75,6 +75,7 @@ Crafty.c("Jump", {
     }
 
     if(this.yV === 0){
+      this.y -= this.jumpV;
       this.yV = this.jumpV;
     }
 

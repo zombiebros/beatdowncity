@@ -1,5 +1,8 @@
 Crafty.c("PlayerControls", {
   xV:0,
+  yV:0,
+  dashLeft:0,
+  dashRight:0,
 
   init: function() {
     this.requires("Keyboard")
@@ -17,36 +20,48 @@ Crafty.c("PlayerControls", {
     }
 
     this.x += this.xV;
+    this.y += this.yV;
 
     //Left
     if(this.isDown(37)){
       this.isWalking = true;
       this.xV = -1;
-      return;
     }
 
     //Right
     if(this.isDown(39)){
       this.isWalking = true;
       this.xV = 1;
-      return;
     }
 
     //Up
-    if(this.isDown(38)){
+    if(this.isDown(38) &&
+       this.isRising !== true &&
+       this.isFalling !== true){
       this.isWalking = true;
-      return this.y-=this.xV;
+      this.yV = -1;
     }
 
     //Down
-    if(this.isDown(40)){
+    if(this.isDown(40) && !this.isRising && !this.isFalling){
       this.isWalking = true;
-      return this.y+=this.xV;
+      this.yV = 1;
     }
 
-    this.xV = 0;
-    this.isWalking = false;
-    this.isStanding = true;
+    if(!this.isDown(37) && !this.isDown(39)){
+      this.xV = 0;
+    }
+
+    if(!this.isDown(38) && !this.isDown(40) &&
+      !this.isRising && !this.isFalling){
+      this.yV = 0;
+    }
+
+    if(!this.isDown(37) && !this.isDown(39) &&
+      !this.isDown(38) && !this.isDown(40)){
+        this.isWalking = false;
+        this.isStanding = true;
+    }
   },
 
   keyHandler: function(){
@@ -72,7 +87,6 @@ Crafty.c("PlayerControls", {
     if(this.isDown(37)){
       this.dashLeft += 1;
       if(this.dashLeft === 2){
-        console.log("Dashing left!");
         this.dashLeft = 0;
       }
     }
@@ -81,7 +95,6 @@ Crafty.c("PlayerControls", {
     if(this.isDown(39)){
       this.dashRight += 1;
       if(this.dashRight === 2){
-        console.log("Dashing Right!");
         this.dashRight = 0;
       }
     }
