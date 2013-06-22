@@ -127,29 +127,6 @@ Crafty.c("Player", {
   this.attach(this.kickbox);
  },
 
-
-  // changeDirection: function(old_pos){
-  //   if(this._x > old_pos._x){
-  //       this.unflip("X");
-  //       try{
-  //         this.punchbox.unmirror();
-  //         this.kickbox.unmirror();
-  //       }catch(ex){
-  //         console.log("Exception:", ex.message);
-  //         console.log("Couldn't update hitboxes haven't rendered yet");
-  //       }
-  //   }else if(this._x < old_pos._x){
-  //       this.flip("X");
-  //       try{
-  //         this.punchbox.mirror();
-  //         this.kickbox.mirror();
-  //       }catch(ex){
-  //         console.log("Exception:", ex.message);
-  //         console.log("Couldn't update hitboxes haven't rendered yet");
-  //       }
-  //   }
-  // },
-
   enterFrameHandler: function(frameNum){
 
     var ani = this.animation_map.length,
@@ -232,7 +209,6 @@ Crafty.c("Player", {
        this.isBackKOing === true){
       return false;
     }
-    console.log("Applying Damage", this.stats);
     this.stats.energy[0] -= amount;
     this["is"+side+"Damageing"] = true;
   },
@@ -273,7 +249,7 @@ Crafty.c("Player", {
     side = (typeof side === 'undefined') ? 'Front' : side;
     this['is'+side+"KOing"] = true;
     this.animate(side+"KO", 1, -1);
-    this.startJump(30, -3);
+    this.startJump(30, -0.2);
   },
 
   // Play damage animation
