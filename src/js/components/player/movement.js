@@ -10,14 +10,16 @@ Crafty.c("Movement", {
       this.z = this.y+this.h;
     }
 
-    if(this.dir > 0){
-      this.unflip('X');
-      this.punchbox.unmirror();
-      this.kickbox.unmirror();
-    }else{
-      this.flip('X');
-      this.punchbox.mirror();
-      this.kickbox.mirror();
+    if(!this.isStaticAnimating()){
+      if(this.dir > 0){
+        this.unflip('X');
+        this.punchbox.unmirror();
+        this.kickbox.unmirror();
+      }else{
+        this.flip('X');
+        this.punchbox.mirror();
+        this.kickbox.mirror();
+      }
     }
 
     if(!this.has('RemotePlayer')){

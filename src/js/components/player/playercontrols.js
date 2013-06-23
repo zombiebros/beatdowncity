@@ -9,16 +9,12 @@ Crafty.c("PlayerControls", {
   },
 
   enterFrameHandler:function(){
+    if(this.isStaticAnimating()){
+      return true;
+    }
+    
     //Left
     if(this.isDown(37)){
-      if(this.isDown || 
-         this.isFrontDamage ||
-         this.isBackDamage ||
-         this.isFrontKOing ||
-         this.isBackKOing){
-
-      }
-
       if(!this.isRising && !this.isFalling){ // Can only flip once in air
         this.isWalking = true;
         this.xV = -1;
@@ -67,8 +63,7 @@ Crafty.c("PlayerControls", {
   },
 
   keyHandler: function(){
-    if(this.isPlaying('Punch') ||
-       this.isPlaying('Kick')){
+    if(this.isStaticAnimating()){
       return false;
     }
 

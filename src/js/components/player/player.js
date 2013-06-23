@@ -65,8 +65,6 @@ Crafty.c("Player", {
    this.collision([10,7], [10,40], [30,40], [30,7]);
    this.bindHitBoxes();
    this.registerAnimations();
-   //this.bind("Move", $.proxy(this.changeDirection, this));
-   //this.bind("Move", $.proxy(this.movingAnimation, this));
    this.bind('EnterFrame', $.proxy(this.enterFrameHandler, this));
    this.animate("Stand",1,1).stop();
 
@@ -92,6 +90,23 @@ Crafty.c("Player", {
      for(var i=ani; i--;){
         this.animate.apply(this,this.animation_map[i]);
      }
+ },
+
+ /*
+ *
+ * Convienece function. Returns true if the players in a state where they should
+ * Remain stationary 
+ *
+ */
+ isStaticAnimating: function(){
+  return this.isPunching       ||
+         this.isKicking        ||
+         this.isFrontDamageing ||
+         this.isBackDamageing  ||
+         this.isFrontKOing     ||
+         this.isDowning        ||
+         this.isRecovering     ||
+         this.isBackKOing;
  },
 
 
@@ -131,7 +146,7 @@ Crafty.c("Player", {
 
     var ani = this.animation_map.length,
         curani;
-    for(var i=ani; i--;){ //revers iterate over the animation map
+    for(var i=ani; i--;){ //reverse iterate over the animation map
       curani = this.animation_map[i][0];
 
       if(curani === 'Standing'){
