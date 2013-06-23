@@ -13,8 +13,8 @@
 
 
 // Initialize Crafty
-var Firebase = new Firebase('https://beatdowncity.firebaseIO.com/');
-var authClient = new FirebaseAuthClient(Firebase, authClientHandler);
+var fbc = new Firebase('https://beatdowncity.firebaseIO.com/');
+var authClient = new FirebaseAuthClient(fbc, authClientHandler);
 
 
 var boundsWidth = 200;

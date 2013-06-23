@@ -7,24 +7,44 @@ Crafty.scene("main",(function() {
     renderOtherUsers: function(otherUsers){
       for(var user_id in otherUsers.val()){
         if(user_id != Crafty.player_id){
-          this.renderUserSnapshot(otherUsers.child(user_id));
+          this.detectPresence(user_id);
         }
       }
       // Render any new users who join in the future
-      Firebase.child('users').on("child_added", $.proxy(this.renderUserSnapshot, this));
+      fbc.child('users').on("child_added", $.proxy(this.detectPresence, this));
+    },
+
+    detectPresence: function(user_id){
+      var _self = this;
+      //if a snapshot is passed instead of a raw user_id
+      if(typeof user_id.name === 'function'){
+        user_id = user_id.name();
+      }
+
+      fbc.child('users/'+user_id+"/presence").on('value', function(snapshot){
+        var presence = snapshot.val();
+        if(presence === 'online'){
+          fbc.child('users/'+user_id).once('value', function(snapshot){
+             _self.renderUserSnapshot(snapshot);
+          });
+        }else{
+         Crafty(Crafty('user_'+user_id)[0]).destroy();
+       }
+     });      
     },
 
     renderLocalPlayer: function(snapshot){
       this.renderUserSnapshot(snapshot);
-      Firebase.child('users').once("value", $.proxy(this.renderOtherUsers, this));
+      fbc.child('users').once("value", $.proxy(this.renderOtherUsers, this));
     },
 
 
     renderUserSnapshot: function(snapshot){
-      var remoteUser = Firebase.child('users').child(snapshot.name()),
+      var remoteUser = fbc.child('users').child(snapshot.name()),
           userState = (snapshot.val() === null) ? {} : snapshot.val();
 
-      if(Crafty('user_'+snapshot.name()).length === 0){ //only render the player once
+      // insure only render the player once
+      if(Crafty('user_'+snapshot.name()).length === 0){
         var player = Crafty.e("Player")
         .attr({
           x: (typeof userState.x != 'undefined') ? userState.x : 0,
@@ -66,10 +86,8 @@ Crafty.scene("main",(function() {
       }).css({
         'color': 'Black'
       });
-      //Crafty.background('resources/images/RiverCityRansomEX-RiverCity.png');
-      var remote = Firebase.child('users').child(Crafty.player_id);
+      var remote = fbc.child('users').child(Crafty.player_id);
       remote.once("value", $.proxy(this.renderLocalPlayer, this));
-//      this.createDummy();
 		}
 	};
 
