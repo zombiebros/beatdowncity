@@ -59,10 +59,15 @@ Crafty.c("Player", {
     ['Down',7,4,7]
   ];
 
+  this.collision_map ={
+    "Standing": [[10,7], [10,40], [30,40], [30,7]],
+    "Downing": [[0,22], [0,40], [35,40], [35,22]]
+  }
+
 
    this.requires("2D, Canvas, player1, SpriteAnimation, Collision");
-//   this.requires("WiredHitBox");
-   this.collision([10,7], [10,40], [30,40], [30,7]);
+   //this.requires("WiredHitBox");
+   this.collision.apply(this, this.collision_map["Standing"]);
    this.bindHitBoxes();
    this.registerAnimations();
    this.bind('EnterFrame', $.proxy(this.enterFrameHandler, this));
@@ -162,9 +167,10 @@ Crafty.c("Player", {
       // If the user state is set and the animations not playing,
       // call the method to play it
       if(this['is'+curani+'ing'] === true &&
-               !this.isPlaying(curani)){
+         !this.isPlaying(curani)){
         return this[curani.toLowerCase()]();
       }
+
     }
 
   },
@@ -182,7 +188,11 @@ Crafty.c("Player", {
     this.animate('Down', 50, 1).bind('AnimationEnd', function(){
       this.isDowning = false;
       this.isRecovering = true;
+      this.collision.apply(this, this.collision_map['Standing']);
+      this.removeComponent('PickUpable');
     });
+    this.addComponent('PickUpable');
+    this.collision.apply(this, this.collision_map['Downing']);
     return;
   },
 

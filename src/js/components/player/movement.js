@@ -36,8 +36,8 @@ Crafty.c("Movement", {
         return;
       }
 
-      this.x += this.xV;
-      this.y += this.yV;
+      this.x = Math.floor(this.x + this.xV);
+      this.y = Math.floor(this.y+ this.yV);
     }else if(this.has('RemotePlayer') &&
       (this.isFrontKOing || this.isBackKOing)){
       this.y += this.yV;

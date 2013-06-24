@@ -30,7 +30,7 @@ Crafty.c("RemotePlayer", {
     this.isFrontKOing = state.isFrontKOing;
     this.isRecovering = state.isRecovering;
     this.isDowning = state.isDowning;
-    this.preJumpy = state.preJumpy;
+    this.preJumpY = state.preJumpY;
     this.email = state.email;
     this.stats = state.stats;
     this.player_name.text(this.email.match(/([_a-z0-9-]+(.[_a-z0-9-]+)*)@/)[1]);
