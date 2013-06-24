@@ -78,10 +78,9 @@ Crafty.c("Jump", {
       this.preJumpY = this.y;
     }
 
-    if(this.yV === 0){
-      this.y -= this.jumpV;
-      this.yV = this.jumpV;
-    }
+    this.yV = 0;
+    this.y -= this.jumpV;
+    this.yV = this.jumpV;
 
     this.isRising = true;
 
