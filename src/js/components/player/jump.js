@@ -7,6 +7,7 @@ Crafty.c("Jump", {
   isFalling: false,
 
   init: function(){
+    var player = this;
     this.bind("EnterFrame", $.proxy(this.enterFrameHandler, this));
   },
 
@@ -24,6 +25,7 @@ Crafty.c("Jump", {
           this.isFrontKOing = false;
           this.isBackKOing = false;
           this.isDowning = true;
+          this.xV = 0;
         }else{
           console.log("is crouching ");
           this.isCrouching = true;

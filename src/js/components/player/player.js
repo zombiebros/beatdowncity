@@ -79,6 +79,7 @@ Crafty.c("Player", {
                            });
    this.attach(this.player_name);
    this.addComponent('Movement, Jump');
+   this.shadow = Crafty.e('Shadow').shadow(this);
  },
 
  /*
