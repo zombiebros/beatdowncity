@@ -29,6 +29,7 @@ Crafty.c("LocalPlayer",{
         dir: this.dir,
         email: Crafty.player_email,
         isPunching: this.isPunching,
+        isCarrying: this.isCarrying,
         isKicking: this.isKicking,
         isJumping: this.isJumping,
         isCrouching: this.isCrouching,

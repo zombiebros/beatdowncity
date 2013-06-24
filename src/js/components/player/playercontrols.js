@@ -12,7 +12,7 @@ Crafty.c("PlayerControls", {
     if(this.isStaticAnimating()){
       return true;
     }
-    
+
     //Left
     if(this.isDown(37)){
       if(!this.isRising && !this.isFalling){ // Can only flip once in air

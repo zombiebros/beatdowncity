@@ -1,17 +1,20 @@
 Crafty.c("Player", {
-  isPunching: false,
-  isKicking: false,
-  isRunning: false,
-  isJumping: false,
-  isStanding: false,
-  isCrouching: false,
-  isFrontDamageing: false,
-  isBackDamageing: false,
-  isBackKOing: false,
-  isFrontKOing: false,
-  isRecovering: false,
-  isWalking: false,
-  isDowning: false,
+  // isPunching: false,
+  // isKicking: false,
+  // isCarrying: false,
+  // isRunning: false,
+  // isJumping: false,
+  // isStanding: false,
+  // isCrouching: false,
+  // isFrontDamageing: false,
+  // isBackDamageing: false,
+  // isBackKOing: false,
+  // isFrontKOing: false,
+  // isRecovering: false,
+  // isWalking: false,
+  // isDowning: false,
+
+  isCarrying: false,
 
   // Velocity
   xV:0,
@@ -44,11 +47,14 @@ Crafty.c("Player", {
   */
   this.animation_map = [
     ["Stand",0,0,0],
+    ["CarryStand", 4,3,4],
     ["Walk",2,0,0],
+    ["CarryWalk", 5,3,6],
     ["FinKick",3,2,3],
     ["FinPunch",6,1,8],
     ['Crouch',6,0,6],
     ['Jump',5,0,5],
+    ['CarryJump', 10,3,10],
     ["Punch",0,1,2],
     ["Kick",0,2,2],
     ['Recover',1,4,1],
@@ -66,7 +72,7 @@ Crafty.c("Player", {
 
 
    this.requires("2D, Canvas, player1, SpriteAnimation, Collision");
-   //this.requires("WiredHitBox");
+   this.requires("WiredHitBox");
    this.collision.apply(this, this.collision_map["Standing"]);
    this.bindHitBoxes();
    this.registerAnimations();
@@ -76,7 +82,7 @@ Crafty.c("Player", {
 
    this.player_name = Crafty.e('2D, DOM, Text, PlayerName')
                            .textColor("#000000")
-                           .textFont({size: "1px"})
+                           .textFont({size: "8px"})
                            .attr({
                             x: this.x,
                             y: (this.y+this.h) + 2,
@@ -95,6 +101,7 @@ Crafty.c("Player", {
      var ani = this.animation_map.length;
      for(var i=ani; i--;){
         this.animate.apply(this,this.animation_map[i]);
+        this["is"+this.animation_map[i][0]+"ing"] = false;
      }
  },
 
@@ -176,29 +183,53 @@ Crafty.c("Player", {
   },
 
   jump: function(){
-    return this.animate('Jump', 1, 0);
+    if(this.isCarrying){
+      this.animate('CarryJump', 1, 0);
+    }else{
+      this.animate('Jump', 1, 0);
+    }
+  },
+
+  carry: function(){
+    this.animate('Carry', 1, 1);
   },
 
   stand: function(){
     this.stop();
-    return this.animate('Stand', 1, 0);
+    if(this.isCarrying){
+      this.animate('CarryStand', 1, 0);
+    }else{
+      this.animate('Stand', 1, 0);
+    }
   },
 
   down: function(){
     this.animate('Down', 50, 1).bind('AnimationEnd', function(){
       this.isDowning = false;
       this.isRecovering = true;
-      this.collision.apply(this, this.collision_map['Standing']);
       this.removeComponent('PickUpable');
+      this.removeComponent('Collision');
+      this.addComponent('Collision');
+      this.collision.apply(this, this.collision_map['Standing']);
     });
-    this.addComponent('PickUpable');
-    this.collision.apply(this, this.collision_map['Downing']);
+    this.requires('PickUpable');
+    
+    if(!this.downBox){
+      this.downBox = true;
+      this.collision.apply(this, this.collision_map['Downing']);
+    }
+
     return;
   },
 
   crouch: function(){
     this.isJumping = false;
     this.stop();
+    if(this.isCarrying){
+      this.isCrouching = false;
+      return;
+    }
+
     this.animate('Crouch',1,1).bind('AnimationEnd', function(){
       this.isCrouching = false;
     });
@@ -215,7 +246,11 @@ Crafty.c("Player", {
   },
 
   walk: function(){
-    this.animate('Walk',15, 0);
+    if(this.isCarrying){
+      this.animate("CarryWalk", 15, 0);
+    }else{
+      this.animate('Walk',15, 0);
+    }
   },
 
   punch: function(){
