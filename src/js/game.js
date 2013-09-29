@@ -48,7 +48,7 @@ function authClientHandler(error, user){
 
 function authClientError(error, user){
   // an error occurred while attempting login
-  alert(" an error occured while logging in");
+  alert(" an error occured while logging in" + error);
 }
 
 function setScale(){
