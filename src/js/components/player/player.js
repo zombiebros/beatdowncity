@@ -120,7 +120,7 @@ Crafty.c("Player", {
     h:10
   })
   .addComponent('Collision')
-  .addComponent('WiredHitBox')
+  //.addComponent('WiredHitBox')
   .onHit("Player", $.proxy(this.punchbox.hitPlayerHandler, this.punchbox));
   this.attach(this.punchbox);
 
@@ -136,7 +136,7 @@ Crafty.c("Player", {
     h:10
   })
   .addComponent('Collision')
-  .addComponent('WiredHitBox')
+  //.addComponent('WiredHitBox')
   .onHit("Player", $.proxy(this.kickbox.hitPlayerHandler, this.kickbox));
   this.attach(this.kickbox);
  },
