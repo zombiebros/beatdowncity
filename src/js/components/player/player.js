@@ -1,19 +1,4 @@
 Crafty.c("Player", {
-  // isPunching: false,
-  // isKicking: false,
-  // isCarrying: false,
-  // isRunning: false,
-  // isJumping: false,
-  // isStanding: false,
-  // isCrouching: false,
-  // isFrontDamageing: false,
-  // isBackDamageing: false,
-  // isBackKOing: false,
-  // isFrontKOing: false,
-  // isRecovering: false,
-  // isWalking: false,
-  // isDowning: false,
-
   isCarrying: false,
 
   // Velocity
@@ -73,7 +58,8 @@ Crafty.c("Player", {
 
    this.requires("2D, Canvas, player1, SpriteAnimation, Collision");
    this.requires("WiredHitBox");
-   this.collision.apply(this, this.collision_map["Standing"]);
+   //this.collision.apply(this, this.collision_map["Standing"]);
+   this.collision([10,7], [10,40], [30,40], [30,7]);
    this.bindHitBoxes();
    this.registerAnimations();
    this.bind('EnterFrame', $.proxy(this.enterFrameHandler, this));
@@ -134,7 +120,7 @@ Crafty.c("Player", {
     h:10
   })
   .addComponent('Collision')
-//.addComponent('WiredHitBox')
+  .addComponent('WiredHitBox')
   .onHit("Player", $.proxy(this.punchbox.hitPlayerHandler, this.punchbox));
   this.attach(this.punchbox);
 
@@ -150,7 +136,7 @@ Crafty.c("Player", {
     h:10
   })
   .addComponent('Collision')
-//  .addComponent('WiredHitBox')
+  .addComponent('WiredHitBox')
   .onHit("Player", $.proxy(this.kickbox.hitPlayerHandler, this.kickbox));
   this.attach(this.kickbox);
  },
@@ -207,17 +193,23 @@ Crafty.c("Player", {
     this.animate('Down', 50, 1).bind('AnimationEnd', function(){
       this.isDowning = false;
       this.isRecovering = true;
-      this.removeComponent('PickUpable');
+      //this.removeComponent('PickUpable');
       this.removeComponent('Collision');
       this.addComponent('Collision');
-      this.collision.apply(this, this.collision_map['Standing']);
+      // Bug in crafty? apply on collision seems to make the block jump
+      //this.collision.apply(this, this.collision_map['Standing']);
+      this.collision([10,7], [10,40], [30,40], [30,7]);
     });
     this.requires('PickUpable');
     
-    if(!this.downBox){
-      this.downBox = true;
-      this.collision.apply(this, this.collision_map['Downing']);
-    }
+     if(!this.downBox){
+         this.downBox = true;
+         this.removeComponent('Collision');
+         this.addComponent('Collision');
+// Bug in crafty? apply dosen't work or is scoped weird?
+//         this.collision.apply(this, this.collision_map['Downing']);
+         this.collision([0,22], [0,40], [35,40], [35,22]);
+     }
 
     return;
   },
